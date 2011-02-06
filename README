@@ -1,0 +1,118 @@
+This is a "plugin" for the Video Disk Recorder (VDR).
+
+Written by:                  herbert attenberger <herbsl at a-land.de>
+
+Project's homepage:          <http://www.a-land.de>
+
+Latest version available at: <http://www.a-land.de>
+
+See the file COPYING for license information.
+
+See the file INSTALL for the installation instructions.
+
+
+Description:
+============
+
+Vdrrip is a plugin to encode the vdr-recordings or dvd's into several
+formats. The supported output-formats are:
+
+Containers:         avi, ogm, matroska
+Video-codecs(divx): lavc, xvid, divx4/5
+Audio-codecs:       mp3, ogg-vorbis, stream-copy for ac3 and mpeg2
+
+Ogg-vorbis, ac3, ogm and matroska have to be manually activated in the
+setup-menu of the plugin. All further codecs are automatically detected by
+the plugin.
+
+You can manually adjust the encoding values, or simply select a
+template (read the section 'Templates' in this manual to find out
+more about them). If you input the resulting movie size (or number of
+files), the video/audio bitrate is calculated. If you change the video/
+audio bitrate, the file size is calculated. If there is more then one
+audio-stream available, you can toggle between them.
+
+You can choose between four scaling mechanism:
+
+off:     Don't scale, use the original resolution
+auto:    The scale values are calculated on a algorithm which is based on
+         the bpp-value. Read the file DOCS/tech/encoding-tips.txt in your
+	 MPlayer-source directory for further informations. The aspect ratio
+	 is corrected
+dvb:     You can only choose values, which are supported by the DVB-Card
+         without needing a further scaling while playing. This option
+	 (together with streamcopy as audio codec) is very useful for slow
+         computers (it is possible to play those files on my Celeron 466
+         Mhz).
+manual:  Select the resolution manually.
+
+In the auto and manual-mode you can automatically detect and crop the black
+movie-boarders with the green key. All settings are saved in the file
+save.vdrrip in the movie directory. After this you can add the movie with
+the red key to the encoding queue (this is the file queue.vdrrip in the
+plugins-directory) and select between preview or full encoding-mode.
+The script queuehandler.sh reads the data from the queue, joins
+or demuxes the vdr-files and encodes the movie.
+
+Some parameters of vdrrip can be adjusted in the setup menu.
+
+DVD's:
+======
+
+See the INSTALL-file how to compile vdrrip with DVD-support.
+
+Vdrrip automatically takes the longest title of the DVD. It is possible
+to switch between them in the menu. If you press <ok> on the title-
+line, a more comfortable title-menu is opened. The last settings
+are saved in the file /tmp/<DVD-NAME>.vdrrip, and will be restored
+if you want to encode the same dvd again.
+
+WARNING !
+
+Most DVDs are encrypted with CSS (Contents Scrambling System). Copying
+of encrypted DVDs is illegal in many countries. This program is not
+meant for those who intend on breaking copyright laws. Every illegal
+use of this software is strictly prohibited. In no way I will be held
+responsible if you do. Be aware to check your countries law !
+
+
+Templates:
+==========
+
+Within a template ('Vdrrip - edit template') you can predefine the encoding-
+settings (either with a fixed file size or a fixed bitrate). The default
+settings are taken from the template 'default'. You can add further
+templates (e.g 1/2-CD, 2/3-CD ...). All templates are saved in the file
+templates.vdrrip in the dir <vdr-config-dir>/PLUGINS.
+
+
+usage of the quehandler-script:
+===============================
+
+queuehandler.sh queuefile tempdir
+
+The queuefile is the file queue.vdrrip in the dir <vdr-config-dir>/PLUGINS.
+This file is only created, if you add a movie to the queue. After the
+encoding the file is deleted by the queuehandler-script. If the movie
+couldn't be encoded by the queuehandler because of an error, the queue-
+data will be moved to the file queue.vdrrip.rejected. Then you have to look
+into the syslog, correct the error and move the movie back to the queue
+with the commands: "cat queue.vdrrip.rejected >> queue.vdrrip" and
+"rm queue.vdrrip.rejected"
+
+Tempdir is the directory where all temporary files are created and where the
+encoded movies are saved. There should be enough space free !
+
+There is no audio-stream in the preview-mode, if the container type is ogm
+or matroska !
+
+
+The file <vdr-config>/PLUGINS/encode.vdrrip is created while an active
+encoding process. You can use it to keep vdr from an automatic shutdown.
+I added my sample scripts vdrshutdown.sh and sleephalt.sh in the dir
+scripts. Feel free to use them. Read the file FAQ to see how you can add
+the queuehandler to the file commands.conf.
+
+
+Please read the files INSTALL, FAQ and TODO for further informations.
+And beware of the dangerous xaver.jpg ...

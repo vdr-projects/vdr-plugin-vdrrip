@@ -1,0 +1,27 @@
+high priority:
+
+
+low priority:
+
+- add pp-filters to templates
+- support more then one audio-stream in ogm/matroska-containers
+
+no priority:
+
+- add music-cd encoding support
+- support different output formats (svcd ...)
+- add possibility to burn the encoded movies to a cd/dvd
+
+done:
+
+- add setup menu (13.09.2003)
+- fix the osd-bugs (help-keys, etc.) (25.09.2003)
+- (first) code-cleanup (25.09.2003)
+- add menu for postprocessing filters (28.09.2003)
+- add script-changes from memed@www.vdrportal.de (28.09.2003)
+- add templates (12.10.2003)
+- add ScaleType, Bpp to templates(19.10.2003)
+- add internationalization support(20.10.2003)
+- add ogg/ogm/matroska-formats (13.01.2004)
+- add status-informations in the encoding-queue (16.04.2004)
+- add dvd encoding support (16.04.2004)

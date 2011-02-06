@@ -1,0 +1,317 @@
+Installation:
+=============
+
+Vdrrip is able to handle some different output-formats/codecs:
+
+- lavc, XviD and DivX as video-codecs
+- lame, ogg-vorbis, mp2, ac3 as audio-codecs
+- avi, ogm, matroska as container-format
+
+The requirements of vdrrip depend on the audio-codecs and container-
+formats, which you want to use. See the following table to know what
+you have to install. No fear, you need only MPlayer[5] to create an
+avi-file with divx-video(lavc) and mp2/ac3-audio(copy). If you want
+mp3-audio for example, you have to install LAME[2a], too.
+
+=======================================================================
+Contanier-formats/ |       avi      |     ogm **)    |   matroska **) |
+Audio-codecs:      |                |                |                |
+=======================================================================
+LAME               |      2a/5      | 2a/3b/4a/4b/5  | 2a/3c/4a/4b/5  |
+-----------------------------------------------------------------------
+ogg-vorbis **)     |  not possible  | 2b/3b/4a/4b/5  | 2b/3c/4a/4b/5  |
+-----------------------------------------------------------------------
+mpg (stream-copy)  |        5       | 3b/4a/4b/5 *)  |    3c/4b/5     |
+-----------------------------------------------------------------------
+ac3 (stream-copy)  |        5       |   3b/4b/5      |    3c/4b/5     |
+-----------------------------------------------------------------------
+
+*)  It is not possible to mux a mpg2-stream into an ogm-container. So the
+    mpg2-stream is converted to ac3 (with the same bitrate).
+
+**) Ogg-Vorbis/ac3/ogm/matroska-support isn't automatically detected by
+    vdrrip. You have to activate them manually in the plugins-setup menu.
+
+
+See 6) how to encode movies from DVD with vdrrip.
+
+
+1) Video-codecs:
+================
+
+Use only lavc for a minimal configuration, XviD and DivX are optional !
+
+  1a) lavc <http://ffmpeg.sourceforge.net>:
+  -----------------------------------------
+  This open source divx-codec is shipped with MPlayer. It is very fast and
+  has a really good quality. Highly recommend !
+
+  
+  1b) XviD <http://www.xvid.org>:
+  -------------------------------
+  XviD is an open source divx-codec. If you want to use it as (additional)
+  video-codec, you have to run the following commands:
+
+  > cd /usr/local/src
+  > tar xzvf xvidcore-X.X.X.tgz
+  > cd xvidcore-X.X.X/build/generic
+  > ./configure
+  > make
+  > make install
+  > ldconfig (/etc/ld.so.conf should include /usr/local/lib)
+
+
+  1c) DivX 4/5: <http://www.divx.com>
+  -----------------------------------
+  DivX is a closed source divx-codec. It is free for personal use. If you
+  want to use it as (additional) video-codec, you have to run the following
+  commands:
+  
+  > cd /usr/local/src
+  > tar xzvf divx4linux-XXXXXXXX.tgz
+  > cd divx4linux-XXXXXXXX
+  > ./install.sh
+    
+  If you use a mplayer version lower then 1.0pre, you need the version
+  20020418 from
+  <http://sourceforge.net/project/showfiles.php?group_id=11050>. Else you
+  can use the version 5.0.5 from <http://www.divx.com>.
+
+
+  
+2) Audio-codecs:
+================
+
+  2a) LAME <http://lame.sourceforge.net>:
+  ---------------------------------------
+  Lame is an open source mp3 encoder. Using the LAME encoding engine (or
+  other mp3 encoding technology) may require a patent license in some
+  countries <http://lame.sourceforge.net/links.html#patents>.
+  If you want to use it as audio codec, you have to to run the following
+  commands:
+
+  > cd /usr/local/src
+  > tar xzvf lame-X.X.X.tgz
+  > cd lame-X.X.X
+  > ./configure
+  > make
+  > make install
+  > ldconfig (/etc/ld.so.conf should include /usr/local/lib)
+  
+  
+  2b) ogg Vorbis <http://www.vorbis.com>:
+  ---------------------------------------
+  Ogg Vorbis is an patent free open source audio encoder.
+  If you want to use it audio codec, you have to download the following
+  sources from <http://www.voribs.com/download.psp>:
+
+  - libogg-X.X.X.tar.gz, install it with
+  
+    > cd /usr/local/src
+    > tar xzvf libogg-X.X.X.tar.gz
+    > cd libogg-X.X.X
+    > ./configure
+    > make
+    > make install
+    > ldconfig (/etc/ld.so.conf should include /usr/local/lib)
+  
+ - libvorbis-X.X.X.tar.gz, install it with
+    > cd /usr/local/src
+    > tar xzvf libvorbis-X.X.X.tar.gz
+    > cd libvorbis-X.X.X
+    > ./configure
+    > make
+    > make install
+    > ldconfig (/etc/ld.so.conf should include /usr/local/lib)
+
+
+3) Container-formats:
+=====================
+
+  3a) avi:
+  --------
+  MPlayer/MEncoder supports the avi-format. You don't have to install
+  something else.
+  
+  
+  3b) ogm <http://www.bunkus.org/videotools/ogmtools/index.html>:
+  ---------------------------------------------------------------
+  To use ogm as (additional) container format, you have to install the 
+  OGMtools with:
+
+  > cd /usr/local/src
+  > tar xjvf ogmtools-X.X.tar.bz2
+  > cd ogmtools-X.X
+  > ./configure
+  > make
+  > make install
+
+  OGMtools depend on libogg and libvorbis [see 2b)] !
+  
+
+  3c) matroska <http://www.bunkus.org/videotools/mkvtoolnix/index.html>:
+  ----------------------------------------------------------------------
+  To use matroska as (additional) container format, you have to install the
+  following libraries/tools (I had to install libexpat on my testsystem !):
+
+  - libebml:
+    
+    > cd /usr/local/src
+    > tar xjvf libebml-X.X.X.tar.bz2
+    > cd libebml-X.X.X/make/linux
+    > make
+    > make install
+    > ldconfig (/etc/ld.so.conf should include /usr/local/lib)
+  
+  - libmatroska:
+    
+    > cd /usr/local/src
+    > tar xjvf libmatroska-X.X.X.tar.bz2
+    > cd libmatroska-X.X.X/make/linux
+    > make
+    > make install
+    > ldconfig (/etc/ld.so.conf should include /usr/local/lib)
+  
+  - mkvtoolnix:
+
+    > cd /usr/local/src
+    > tar xjvf mkvtoolnix-X.X.X.tar.bz2
+    > cd mkvtoolnix-X.X.X
+    > ./configure
+    > make
+    > make install
+
+  Mkvtoolnix depend on libogg and libvorbis [see 2b)] !
+
+
+4) Tools:
+=========
+
+  4a) ffmpeg <http://ffmpeg.sourceforge.net>:
+  -------------------------------------------
+  ffmpeg is an open source tool, to convert between several video and audio
+  formats. You only need it together with ogm/matroska-containers. You can
+  install it with the following commands:
+
+  > cd /usr/local/src
+  > tar xzvf ffmpeg-X.X.X.tar.gz
+  > cd ffmpeg-X.X.X
+  > ./configure --disable-ffserver --disable-ffplay --disable-debug \
+                --enable-a52 --enable-mp3lame --enable-vorbis
+  (only use --enable-mp3lame, if LAME [2a] is installed)
+  (only use --enable-vorbis, if ogg Vorbis [2b] is installed)
+  > make
+  > make install
+
+  
+  4b) vdrsync <http://vdrsync.vdr-portal.de>:
+  -------------------------------------------
+  The perl-script vdrsync is used to demux the vdr-recordings. You only
+  need it together with ogm/matroska-containers. There is a copy of it
+  (version 0.1.2.2 without Documentation) in the directory /scripts. To use
+  it, type:
+
+  > cp vdrrip/scripts/vdrsync.pl /usr/local/bin
+  
+  The version 0.1.2.2dev1 isn't supported at the moment (because of changes
+  in the output format) !
+
+ 
+5) MPlayer <http://www.mplayerhq.hu>:
+=====================================
+
+All Codecs [see 1/2] have to be installed before the MPlayer installation.
+All version higher than 0.90 should run. To compile and install mplayer run
+the following commands:
+
+  > cd /usr/local/src
+  > tar xjvf MPlayer-X.X.bz2
+  > cd MPlayer-X.X
+  > ./configure --with-extraincdir=<your path to the DVB-drivers>/include \
+                --enable-largefiles
+  > make
+  > make install (This mplayer/mencoder-version is used to encode
+  vdr-streams (without ac3) and dvd's !!!)
+
+
+  If you want to encode/copy ac3-audio from vdr-recordings (not dvd's), you
+  have to install a second, patched (form the directory /patches) version
+  of MPlayer (thx to viking@www.vdrportal.de):
+  
+  > cd /usr/local/src
+  > cp -a MPlayer-X.X MPlayer-X.X_ac3
+  > cd MPlayer-X.X_ac3
+  > cat MPlayer_vdrac3.diff | patch libmpdemux/demux_mpg.c
+  > cd libmpdemux
+  > make clean
+  > cd ..
+
+  > ./configure --with-extraincdir=<your path to the DVB-drivers>/include \
+                --enable-largefiles
+  > make (don't type make install after this !!!)
+  > cp mplayer /usr/local/bin/mplayer_ac3
+  > cp mencoder /usr/local/bin/mencoder_ac3
+
+
+6) encoding from DVD:
+=====================
+
+To encode movies from DVD you have to install the library libdvdnav from
+<http://dvd.sourceforge.net>:
+
+  > cd /usr/local/src
+  > tar xzvf libdvdnav-X.X.X.tar.gz
+  > ./configure
+  > make
+  > make install
+
+Then uncomment the line VDRRIP_DVD=1 in the file Makefile.
+
+The tested version is libdvdnav-0.1.9. This is the same version which is
+recommend for the dvd-plugin.
+
+The default DVD-device is /dev/dvd. If you have a different path, set a
+symlink or specify the value -d DEV in your vdr start-script.
+
+HINTS: If the kernel-module ide-scsi is loaded, your DVD-device is probably
+/dev/sr0 or /dev/sr1.
+
+And don't forget to give read-privileges to the user which starts vdr.
+
+  
+7) vdrrip-plugin:
+=================
+
+  > cd vdr/PLUGINS/src
+  > tar xzvf vdr-vdrrip-X.X.X.tgz
+  > ln -s vdrrip-X.X.X vdrrip
+  > cp vdrrip/scripts/queuehandler.sh /usr/local/bin (or e.g. /usr/bin)
+  > cp vdrrip/scripts/queuehandler.sh.conf /usr/local/bin (or e.g. /usr/bin)
+  > cd ../..
+  > make plugins
+
+  Now you have to adjust the settings in the file queuehandler.sh.conf
+
+  See the README and FAQ how to use the queuehandler.
+
+
+  optional:
+  > cp vdrrip/scripts/vdrshutdown.sh /usr/local/bin (or e.g. /usr/bin)
+  > cp vdrrip/scripts/sleephalt.sh /usr/local/bin (or e.g. /usr/bin)
+
+
+  To load the plugin add '-Pvdrrip' to your vdr start-script. If mplayer/
+  mencoder aren't installed to /usr/local/bin, you have to add the
+  following paramter:
+ 
+    -p LOC,  --MPlayer=LOC  use LOC as location of MPlayer
+                            (default is /usr/local/bin/mplayer)
+    -e LOC,  --MEncoder=LOC use LOC as location of MEncoder
+                            (default is /usr/local/bin/mencoder)
+  This parameter could be used to specify you DVD-device:
+    -d DEV,  --DVD=DEV      use DEV as your DVD-device 
+                            (default is /dev/dvd)
+	       
+  e.g: -P'vdrrip -p /bin/mplayer -e /bin/mencoder'
+
+  To use the shutdown scripts, add -s <path-to-vdrshutdown.sh>.

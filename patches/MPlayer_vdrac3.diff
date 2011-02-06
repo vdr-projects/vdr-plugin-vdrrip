@@ -1,0 +1,38 @@
+--- libmpdemux/demux_mpg.c.orig	Fri Apr  4 17:38:46 2003
++++ libmpdemux/demux_mpg.c	Mon Jun 16 11:54:20 2003
+@@ -124,7 +124,7 @@
+     
+     //============== DVD Audio sub-stream ======================
+     if(id==0x1BD){
+-      int aid=stream_read_char(demux->stream);--len;
++      int aid=128; //stream_read_char(demux->stream);--len;
+       if(len<3) return -1; // invalid audio packet
+       
+       // AID:
+@@ -145,10 +145,11 @@
+             ds=demux->sub;
+         }
+           
+-      } else if((aid & 0xC0) == 0x80 || (aid & 0xE0) == 0x00) {
++      } else if((aid & 0xC0) == 0x80) {
+ 
+ //        aid=128+(aid&0x7F);
+         // aid=0x80..0xBF
++//	if(aid<0x20) aid+=0x80; // hack
+ 
+         if(!demux->a_streams[aid]) new_sh_audio(demux,aid);
+         if(demux->audio->id==-1) demux->audio->id=aid;
+@@ -158,11 +159,13 @@
+         ds=demux->audio;
+         if(!ds->sh) ds->sh=demux->a_streams[aid];
+         // READ Packet: Skip additional audio header data:
++      #if 0
+         c=stream_read_char(demux->stream);//num of frames
+         type=stream_read_char(demux->stream);//startpos hi
+         type=(type<<8)|stream_read_char(demux->stream);//startpos lo
+ //        printf("\r[%02X][%04X]",c,type);
+         len-=3;
++      #endif
+         if((aid&0xE0)==0xA0 && len>=3){
+ 	  unsigned char* hdr;
+ 	  // save audio header as codecdata!

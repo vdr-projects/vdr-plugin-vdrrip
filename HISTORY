@@ -1,0 +1,114 @@
+VDR Plugin 'vdrrip' Revision History
+------------------------------------
+
+2003-09-14: Version 0.0.7
+
+- Initial revision.
+
+2003-09-15: Version 0.0.7a
+
+- added -frames 0 to get -identify in MPlayer1.0pre1 running
+- some changes in the README and FAQ - file
+
+2003-09-15: Version 0.0.7b
+
+- vdr-recordings can only be selected with selectvdrrip.sh,
+  if the file marks.vdr is available
+- menue changes in menu-vdrrip.c:
+  VDR to 'encode vdr-rec. (Movie-Name)' (it is only
+  displayed if a recording is selected
+- a lot of changes in the error handling in movie.c:
+  (vdrrip shouldn't crash, even if mplayer/mencoder isn't
+  available)
+
+2003-09-18: Version 0.0.8
+
+- add pclose(p) in cMovieBase::queryCodecs() to avoid zombie-processes
+  (reported by Chrillepup@www.vdrportal.de)
+- set the movie names in brackets at the #defines in movie.c
+  (reported by zuse@www.vdrportal.de)
+- (first) code-cleanup of menu-vdrrip.c
+- don't save/delete save.vdrrip if the video/audio-codec isn't detected
+  (reported by dbox.network@www.vdrportal.de)
+- add (optional) renaming of encoded vdr-recordings
+  (thx to memed@www.vdrportal.de)
+- selectvdrrip.sh works if the video-directory is a subdirectory
+  (thx to memed@www.vdrportal.de)
+- 001.vdr is copied, if a symbolic-link could not created (for fat-partitions)
+  (reported by memed@www.vdrportal.de)
+- add (alternative) usage of svdrpsend.pl in queuehandler.sh
+- fixed OSD-bugs (help-keys etc.)
+- add experts-menu (with postprocess-filters)
+- add handling of postprocess-filters to queuehandler.sh
+
+2003-10-12: Version 0.0.9
+- add command line arguments for mplayer/mencoder-location, to avoid
+  problems with $PATH (see ./vdr --help)
+- fix a bug in menu-vdrrip.c (with postprocess-filters)
+- fix a bug in menu-vdrrip.c (display Audio-ID, if more then one audio-id is available)
+- add templates-handling (templates.c)
+- moved codecs-handling to codecs.c
+- removed the bitrate-line from osd
+- some changes in the README and FAQ - file
+
+2003-11-24: Version 0.1.0
+- code-cleanup of codecs.c
+- add ScaleType & Bpp to templates-handling
+- write all messages and errors to syslog instead of stdout/stderr
+- add Bpp-Value to expert-menu
+- add internationalization support
+- changed " to ' at the #defines in movie.c
+  (thx to memed@www.vdrportal.de)
+- changed menu-handling (selectvdrrip.sh is now obsolete)
+- some changes in the README and FAQ - file
+
+2003-12-14: Version 0.1.1
+- add italian translation (thx to tinconn@virgilio.it)
+- moved queue-handling to queue.c
+- add locking-mechanism to allow the editing of the queue
+- changed vdrriprecordings.c to display recordings with more than
+  two subdirectories (reported by frissi@www.vdrportal.de)
+- some cosmetic changes of the menus in menu-vdrrip.c
+
+2004-01-17: Version 0.2.0
+- add ogg-vorbis support
+- add ac3-support
+- add ogm-support
+- add matroska-support
+- now display more audio-informations
+- display container-type in queuefile-menu
+- get movie length from index.vdr instead of marks.vdr
+  (the template "default-fixed Bitrate" is now obsolete)
+- add a ac3 MPlayer-patch to the /patches directory
+- avoid VideoBitrates < 150 in cMovieBase::setBitrate
+- avoid AudioBitrates < 32 in cMovieBase::setBitrate
+- decrease VideoBitrate if AudioBitrate is increased
+- some cosmetic changes of the menus in menu-vdrrip.c
+- add french translation (thx to mak_addikt@yahoo.fr)
+- splitted the install-section from README to INSTALL
+- lot's of changes in the queuehandler.sh
+
+2004-01-20: Version 0.2.0a
+- fixed a bug in cMovie::setCodecs (thx to markus.maeder@oase.ch)
+- fixed a bug in queuehandler.sh (reported by cosmo@www.vdrportal.de)
+
+2004-04-22: Version 0.3.0
+- add dvd as input source
+- add one line in i18.c to be compatible with vdr-1.3.2 and newer
+- changed cMovie::setCropValues() to support dvd's
+- switch between 'crop boarders' and 'reset boarders' possible
+- now round crop & scale-values to a multiple of 16 (to avoid errors with
+  xvid and divx)
+- add more deinterlacing filters (requested by sebastian.kemper@web.de)
+- now colored items are used to display informations
+- decide between preview or full mode while adding a movie to the queue
+- close the encoding-menue after adding the movie to the queue (requested
+  by mariom@www.vdrportal.de)
+- display the encoding step in the queue menue (requested by
+  skyalex@www.vdrportal.de)
+- switching between preview mode and normal mode is possible in the
+  queue menu
+- moved 2-pass logfiles of the queuehandler to $tempdir.
+  (requested by mrmoe@www.vdrportal.de)
+- check for mplayer&mencoder (requested by hapemo@www.vdrportal.de)
+- some cosmetic changes in queue.c

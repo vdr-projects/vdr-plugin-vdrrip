@@ -1,0 +1,137 @@
+What is the bpp-value ?
+
+  This is copied from the file DOCS/tech/encoding-tips.txt in the MPlayer-
+  source directory:
+  
+          $videobitrate * 1024       
+  $bpp = -----------------------
+         $width * $height * $fps
+
+
+What bpp-value should I use ?
+
+  This is copied from the file DOCS/tech/encoding-tips.txt in the MPlayer-
+  source directory:
+
+  < 0.10: don't do it. Please. I beg you!
+  < 0.15: It will look bad.
+  < 0.20: You will notice blocks, but it will look ok.
+  < 0.25: It will look really good.
+  > 0.25: It won't really improve visually.
+  > 0.30: Don't do that either - try a bigger resolution instead.
+
+
+What is matroska ? I have heard it is a "container format" ? What's that ?
+
+  A container format allows you to combine different multimedia streams
+  (most of the time Audio and video) into one single file. Multimedia
+  containers are for example the well known AVI (.avi), MPEG (.mpg, .mpeg),
+  OGM (.ogm), MP4 (.mp4) or Realmedia (.rm, .rmvb)
+
+  The matroska project is a free, opensource container format, aiming to be
+  able to offer a lot of advanced features, which older formats like AVI
+  can't handle, on an extensible basis. Matroska supports for example the
+  storage of Variable Bitrate audio content (VBR) without any hassles,
+  Variable Framerates (VFR), Chapters, attachment of files, Error Detection
+  (EDC) and modern A/V Codecs like "Advanced Audio Coding" (AAC), "Ogg
+  Vorbis" or "Realvideo 9" (RV9), all things AVI can't handle.
+
+  (This text is copied from the "Matroska FAQ" <http://forum.doom9.org> 
+  Forum: New AV/Formats - Containers)
+
+
+Which deinterlacing-Filter should i use ?
+
+  I don't know, but there are really interesting informations/pictures at
+  <http://home.knuut.de/MWieser_/vf_raw_ntv_3/>.
+  
+  
+I don't like your encoding-options. How can I change them ?
+
+  feel free to change them in the file queuehandler.sh:
+
+  ...
+  case "$vcodec" in
+    "lavc")
+      local vopts="-ovc lavc -lavcopts vcodec=mpeg4:vhq:vbitrate=$br_video\
+      :vqmin=$min_q:vqmax=$max_q:vpass=$pass -sws 2"
+      ;;
+    "xvid")
+      local vopts="-ovc xvid -xvidencopts bitrate=$br_video:me_quality=6:\
+      pass=$pass -sws 2"
+      ;;
+    "divx4")
+      local vopts="-ovc divx4 -divx4opts br=$br_video:q=5:min_quant=$min_q\
+      :max_quant=$max_q:pass=$pass -sws 2"
+      ;;
+   ...
+
+
+The resulting file-size is smaller then the requested. What's the reason ?
+
+  I am using the abr-mode of lame. The resulting audio-bitrate should be
+  smaller then the requested. You can use vbr or cbr mode (see lame &
+  mplayer manpage), but then you will get less audio quality.
+
+
+I couldn't add the movie to the queue. What's wrong ?
+
+  You can only add the movie to the queuefile, if the cursor isn't on the
+  FileName dialog.
+
+
+What does the fields in the file queue.vdrrip mean ? 
+
+  e.g.: /video/%Irgendwie_und_Sowieso/2003-09-11.21:43.50.50.rec/001.vdr;
+        Irgendwie_und_Sowieso;350;1;lavc;896;2;15;712;568;0;4;496;360;
+	lame;96;0;lb;1;avi;1
+
+  /video/.../001.vdr:    path of the first vdr-file
+  Irgendwie_und_Sowieso: name of the encoded movie
+  350:                   filesize of one file
+  1:                     number of resulting Files
+  lavc:                  video codec
+  896:                   video bitrate
+  2:                     min quantizer
+  15:                    max quantizer
+  712:                   crop width
+  568:                   crop height
+  0:                     crop pos x
+  4:                     crop pos y
+  496:                   scale width
+  360:                   scale height
+  lame:                  audio codec
+  96:                    audio bitrate
+  0:                     audio id
+  lb:                    postprocess-setting(s)
+  1:                     rename vdr-dir after encoding (0: don't rename)
+  avi:                   container-format
+  1:                     encode only preview (0: encode all)
+
+
+Is it possible to do the real encoding process on an other machine within
+a network ?
+
+  Yes, it is !
+  
+  First you have to mount two directories (e.g. nfs) on the other machine:
+
+  - /video* to the same mountpoint to access the vdr-files. Read-only is
+    enough, if you didn't set the parameter "rename after encoding" to
+    "yes" in the setup-menu.
+  - /<vdr-config-dir>/plugins to a arbitary mountpoint (read-write),
+    because there are the nessecary files queue.vdrrip, lock.vdrrip and
+    encode.vdrrip.
+
+  Then you only have to install mplayer/mencoder with all needed codecs and
+  container-tools, and copy the queuehandler (/scripts/queuehandler.sh &
+  /scripts/queuehandler.sh.conf) and perhaps vdrsync.pl to e.g.
+  /usr/local/bin. See the table in the file INSTALL for further
+  informations.
+
+
+Why do I get the error "Can't open main ifo from dvd !" or "Can't open
+ifo x !" if I try to encode a DVD ?
+
+  Probably the DVD is encrypted. Copying encrypted DVD's is illegal in many
+  countries. Don't send any questions regarding encrypted DVD's.

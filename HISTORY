@@ -135,4 +135,5 @@ VDR Plugin 'vdrrip' Revision History
     * patches by Tobias Grimm <etobi@debian.org>
       - use libdvdread's NEW_IFO_READ functions
       - fix compilation for gcc4.4
-
+- Now only supports vdr >= 1.7 due to changed recording formats. Needs
+  Project-X for demux as well.

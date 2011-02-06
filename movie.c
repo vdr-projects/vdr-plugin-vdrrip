@@ -29,7 +29,7 @@
 
 #define IDENTCMD "%s \'%s\'%s -identify -frames 1 -vo md5sum:outfile=/dev/null -ao null 2>/dev/null | sed -e \'s/[`\\!$\"]/\\&/g\'"
 #define CROPCMD "%s \'%s\'%s -vo null -ao null -quiet -ss %i -frames %i -vf cropdetect 2>/dev/null | grep \"crop=\" | sed \"s/.*crop\\(.*\\)).*/\\1/\" | sort | uniq -c | sort -r"
-#define AUDIOPID "%s \'%s/00001.ts\' -vo null -ao null -frames 0 2>/dev/null | grep pid | cut -d \')\' -f2 | cut -d \'=\' -f 2"
+#define AUDIOPID "%s \'%s/00001.ts\' -vo null -ao null -frames 0 2>/dev/null | grep \"AUDIO MPA(pid\" | cut -d \')\' -f2 | cut -d \'=\' -f 2"
 #define AUDIOCMD "%s \'%s/00001.ts\' -vo null -ao null -frames 0 -aid %i 2>/dev/null | grep ^AUDIO"
 #define AUDIOCMDDVD "%s %s -vo null -ao null -frames 0 -aid %i 2>/dev/null | grep ^AUDIO"
 #define MENCCMD "%s %s help 2>/dev/null"

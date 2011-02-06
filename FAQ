@@ -48,7 +48,7 @@ Which deinterlacing-Filter should i use ?
   
 I don't like your encoding-options. How can I change them ?
 
-  feel free to change them in the file queuehandler.sh:
+  feel free to change them in the queuehandler script:
 
   ...
   case "$vcodec" in
@@ -124,8 +124,8 @@ a network ?
     encode.vdrrip.
 
   Then you only have to install mplayer/mencoder with all needed codecs and
-  container-tools, and copy the queuehandler (/scripts/queuehandler.sh &
-  /scripts/queuehandler.sh.conf) and perhaps vdrsync.pl to e.g.
+  container-tools, and copy the queuehandler (/scripts/queuehandler &
+  /scripts/queuehandler.conf) and perhaps vdrsync.pl to e.g.
   /usr/local/bin. See the table in the file INSTALL for further
   informations.
 

@@ -285,12 +285,12 @@ And don't forget to give read-privileges to the user which starts vdr.
   > cd vdr/PLUGINS/src
   > tar xzvf vdr-vdrrip-X.X.X.tgz
   > ln -s vdrrip-X.X.X vdrrip
-  > cp vdrrip/scripts/queuehandler.sh /usr/local/bin (or e.g. /usr/bin)
-  > cp vdrrip/scripts/queuehandler.sh.conf /usr/local/bin (or e.g. /usr/bin)
+  > cp vdrrip/scripts/queuehandler /usr/local/bin (or e.g. /usr/bin)
+  > cp vdrrip/scripts/queuehandler.conf /usr/local/bin (or e.g. /usr/bin)
   > cd ../..
   > make plugins
 
-  Now you have to adjust the settings in the file queuehandler.sh.conf
+  Now you have to adjust the settings in the file queuehandler.conf
 
   See the README and FAQ how to use the queuehandler.
 

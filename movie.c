@@ -29,8 +29,9 @@
 
 #define IDENTCMD "%s \'%s\'%s -identify -frames 1 -vo md5sum:outfile=/dev/null -ao null 2>/dev/null | sed -e \'s/[`\\!$\"]/\\&/g\'"
 #define CROPCMD "%s \'%s\'%s -vo null -ao null -quiet -ss %i -frames %i -vf cropdetect 2>/dev/null | grep \"crop=\" | sed \"s/.*crop\\(.*\\)).*/\\1/\" | sort | uniq -c | sort -r"
-#define AUDIOCMD "%s \'%s/001.vdr\' -vo null -ao null -frames 0 -aid %i 2>/dev/null | grep AUDIO"
-#define AUDIOCMDDVD "%s %s -vo null -ao null -frames 0 -aid %i 2>/dev/null | grep AUDIO"
+#define AUDIOPID "%s \'%s/00001.ts\' -vo null -ao null -frames 0 2>/dev/null | grep pid | cut -d \')\' -f2 | cut -d \'=\' -f 2"
+#define AUDIOCMD "%s \'%s/00001.ts\' -vo null -ao null -frames 0 -aid %i 2>/dev/null | grep ^AUDIO"
+#define AUDIOCMDDVD "%s %s -vo null -ao null -frames 0 -aid %i 2>/dev/null | grep ^AUDIO"
 #define MENCCMD "%s %s help 2>/dev/null"
 
 // --- cMovie ------------------------------------------------------------
@@ -296,7 +297,7 @@ bool cMovie::setCropValues() {
   int l1;
 
   if (Dvd) {asprintf(&cmd, IDENTCMD, MPlayer, Dir, "");
-  } else {asprintf(&cmd, IDENTCMD, MPlayer, Dir, "/001.vdr");}
+  } else {asprintf(&cmd, IDENTCMD, MPlayer, Dir, "/00001.ts");}
 
   FILE *p = popen(cmd, "r");
   if (p) {
@@ -316,8 +317,8 @@ bool cMovie::setCropValues() {
     asprintf(&cmd, CROPCMD, MPlayer, Dir, "", l/2, l1);
     isyslog("[vdrrip] detecting crop values in %s", Dir);
   } else {
-    asprintf(&cmd, CROPCMD, MPlayer, Dir, "/001.vdr", l/2, l1);
-    isyslog("[vdrrip] detecting crop values in %s/001.vdr", Dir);
+    asprintf(&cmd, CROPCMD, MPlayer, Dir, "/00001.ts", l/2, l1);
+    isyslog("[vdrrip] detecting crop values in %s/00001.ts", Dir);
   }
   p = popen(cmd, "r");
   FREE(cmd);
@@ -481,7 +482,7 @@ const char* cMovie::getPPValues() {return PPValues;}
 void cMovie::setLengthVDR() {
   char *file = NULL;
 
-  asprintf(&file, "%s/index.vdr", Dir);
+  asprintf(&file, "%s/index", Dir);
   FILE *f = fopen(file, "r");
   if (f) {
     fseek(f, 0, SEEK_END);
@@ -500,7 +501,7 @@ void cMovie::setLengthVDR() {
 void cMovie::queryMpValuesVDR() {
   char *cmd = NULL, *s = NULL;
 
-  asprintf(&cmd, IDENTCMD, MPlayer, Dir, "/001.vdr");
+  asprintf(&cmd, IDENTCMD, MPlayer, Dir, "/00001.ts");
   FILE *p = popen(cmd, "r");
   if (p) {
     s = strcol(strgrep("ID_VIDEO_WIDTH", p), "=", 2);
@@ -564,7 +565,18 @@ void cMovie::queryAudioDataVDR() {
   char *cmd = NULL, *buf = NULL;
   size_t i = 0;
   int n = 0;
+  
+  // Get Audio PID
+  asprintf(&cmd, AUDIOPID, MPlayer, Dir);
+  FILE *apid = popen(cmd,"r");
+  isyslog ("Getting Audio PID of ts: %s",cmd);
   int c = 0;
+  if (apid && getline(&buf,&i,apid) != -1) {
+      c = atoi (buf);
+  }
+  pclose(apid);
+  isyslog("Pid selected : %i",c);
+  
   bool next = true;
 
   while (next) {
@@ -572,7 +584,7 @@ void cMovie::queryAudioDataVDR() {
     FILE *p = popen(cmd, "r");
     if (p) {
       if (getline(&buf, &i, p) != -1) {
-	if (c == 128) {next = false;}
+	if (c == 255) {next = false;}
 	A = (struct AudioData*)realloc(A, (n + 1) * sizeof(struct AudioData));
 
 	A[n].AudioID = c;

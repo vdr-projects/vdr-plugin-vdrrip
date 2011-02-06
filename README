@@ -51,7 +51,7 @@ movie-boarders with the green key. All settings are saved in the file
 save.vdrrip in the movie directory. After this you can add the movie with
 the red key to the encoding queue (this is the file queue.vdrrip in the
 plugins-directory) and select between preview or full encoding-mode.
-The script queuehandler.sh reads the data from the queue, joins
+The script queuehandler reads the data from the queue, joins
 or demuxes the vdr-files and encodes the movie.
 
 Some parameters of vdrrip can be adjusted in the setup menu.
@@ -89,7 +89,7 @@ templates.vdrrip in the dir <vdr-config-dir>/PLUGINS.
 usage of the quehandler-script:
 ===============================
 
-queuehandler.sh queuefile tempdir
+queuehandler queuefile tempdir
 
 The queuefile is the file queue.vdrrip in the dir <vdr-config-dir>/PLUGINS.
 This file is only created, if you add a movie to the queue. After the

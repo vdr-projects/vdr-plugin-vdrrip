@@ -5,7 +5,7 @@
 # this scrip handles the queue which is generated from          #
 # the vdr-plugin vdrrip.                                        #    
 #                                                               #
-# usage: queuehandler.sh queuefile tempdir                      #
+# usage: queuehandler queuefile tempdir                         #
 #                                                               #
 #                                                               #
 # written by herbert attenberger <herbsl@a-land.de>             #
@@ -63,10 +63,10 @@
 #                    - added $qh_ver & qh_conf_ver              #
 #                                                               #
 #################################################################
-qh_ver="0.3.0"
+qh_ver="0.3.2"
 
 
-function initialize () {
+initialize () {
 #
 # make initial checks
 #
@@ -78,7 +78,7 @@ function initialize () {
 
   if [ -e "$scriptdir/$cfgfile" ]
   then
-    source "$scriptdir/$cfgfile"
+    . "$scriptdir/$cfgfile"
   else
     log_error "file $cfgfile not found in $scriptdir, aborting !" 1
   fi
@@ -115,7 +115,7 @@ function initialize () {
 }
 
 
-function read_queue () {
+read_queue () {
 #
 # wait for the queuefile and read the first line
 #
@@ -169,8 +169,8 @@ function read_queue () {
   
   log_info "### start encoding movie $shortname in $mode mode ###"
 
-  log_debug "version of queuehandler.sh: $qh_ver"
-  log_debug "version of queuehandler.sh.conf: $qh_conf_ver"
+  log_debug "version of queuehandler: $qh_ver"
+  log_debug "version of queuehandler.conf: $qh_conf_ver"
   log_debug "dir: $dir" 
   log_debug "name: $name"
   log_debug "filesize: $filesize"
@@ -195,14 +195,14 @@ function read_queue () {
 }
 
 
-function pre_check () {
+pre_check () {
 #
 # make some checks before the encoding
 #
   if [ "$error" ]; then return; fi
 
   # check mplayer/mencoder
-  if [ ! "$dvd" -a $audio_id -ge 128 ]
+  if [ ! "$dvd" -a $audio_id -eq 128 ]
   then
     # encoding a vdr-recording with selected ac3-stream
     check_exe "$mencoder_ac3" "mencoder_ac3="
@@ -236,7 +236,7 @@ function pre_check () {
       fi
       ;;
     "ogm")
-      check_exe "$vdrsync" "vdrsync="
+      check_exe "$projectx" "projectx="
       check_exe "$ogmmerge" "ogmmerge="
 
       if [ "$acodec" = "lame" -o "$acodec" = "ogg-vorbis" ]
@@ -250,7 +250,7 @@ function pre_check () {
       fi
       ;;
     "matroska")
-      check_exe "$vdrsync" "vdrsync="
+      check_exe "$projectx" "projectx="
       check_exe "$mkvmerge" "mkvmerge="
 
       if [ "$acodec" = "lame" -o "$acodec" = "ogg-vorbis" ]
@@ -265,7 +265,7 @@ function pre_check () {
 }
 
 
-function calc_steps () {
+calc_steps () {
 #
 # calculate the nuber of encoding-steps
 #
@@ -279,24 +279,24 @@ function calc_steps () {
 
   steps="8"
 
-  if [ "$filenumbers" = "1" ]; then let steps=steps-1; fi
+  if [ "$filenumbers" = "1" ]; then steps=$((steps-1)); fi
   
   case "$container" in
     "avi")
-      let steps=steps-4
-      if [ "$dvd" ]; then let steps=steps-1
-      elif [ ! -e "$dir/002.vdr" ]; then let steps=steps-1; fi
+      steps=$((steps-4))
+      if [ "$dvd" ]; then steps=$((steps-1))
+      elif [ ! -e "$dir/00002.ts" ]; then steps=$((steps-1)); fi
       ;;
     "ogm")
-      let steps=steps-2
-      if [ "$acodec" = "copy" -a $audio_id -ge 128 ]
+      steps=$((steps-2))
+      if [ "$acodec" = "copy" -a $audio_id -eq 128 ]
       then
-	let steps=steps-1
+	steps=$((steps-1))
       fi
       ;;
     "matroska")
-      let steps=steps-2
-      if [ "$acodec" = "copy" ]; then let steps=steps-1; fi
+      steps=$((steps-2))
+      if [ "$acodec" = "copy" ]; then steps=$((steps-1)); fi
       ;;
     *)
       ;;
@@ -304,7 +304,7 @@ function calc_steps () {
 }
 
 
-function preview () {
+preview () {
 #
 # get the preview values
 #
@@ -315,13 +315,13 @@ function preview () {
   shortname="$shortname(preview)"
   
   # start the preview in the middle of the movie
-  local length=`"$mp" -vo null -ao null -identify -frames 0 "$dir/001.vdr" 2>/dev/null | grep ID_LENGTH | cut -d"=" -f2`
-  let local ss=$(echo $length | sed -e s/[.,].*//)/2
+  local length=`"$mp" -vo null -ao null -identify -frames 0 "$dir/00001.ts" 2>/dev/null | grep ID_LENGTH | cut -d"=" -f2`
+  local ss=$(($(echo $length | sed -e s/[.,].*//)/2))
   previewval="-ss $ss -endpos $previewlength"
 }
 
 
-function prepare() {
+prepare() {
 #
 # prepares the encoding-process
 #
@@ -336,24 +336,24 @@ function prepare() {
   case "$container" in
     "avi")
       # join all vdr-files to $tempdir/temp.vdr
-      if [ -e "$dir/002.vdr" -a "$preview" != "1" ]
+      if [ -e "$dir/00002.ts" -a "$preview" != "1" ]
       then
         log_info "joining all vdr-files from directory $dir"
 	evecho "joining vdr-files"
-        nice -+19 cat $dir/[0-9][0-9][0-9].vdr > "$tempdir/temp.vdr"
+        nice -+19 cat $dir/[0-9][0-9][0-9][0-9][0-9].ts > "$tempdir/temp.vdr"
      else
 	create_symbolic_link
       fi
       ;;
     "ogm"|"matroska")
-      # demux vdr-recording with vdrsync
+      # demux vdr-recording with projectx
       if [ "$preview" = "1" ]
       then
         create_symbolic_link
       else
         log_info "demuxing all vdr-files from directory $dir"
 	evecho "demuxing vdr-files"
-        execute "$vdrsync $dir -o $tempdir"
+        execute "$projectx -demux $dir/0*.ts -out $tempdir"
 	# vdrsync 0.1.2.2 developer version creates bd.mpa
 	if [ -e "$tempdir/bd.mpa" ]
 	then
@@ -367,26 +367,26 @@ function prepare() {
 }
 
 
-function create_symbolic_link() {
+create_symbolic_link() {
 #
-# creates a symbolic link of 001.vdr to $temdir/temp.vdr
+# creates a symbolic link of 00001.ts to $temdir/temp.vdr
 #
   if [ "$error" ]; then return
   elif [ "$dvd" ]; then return; fi
 
-  log_info "create a symbolic link from $dir/001.vdr to $tempdir/temp.vdr"
-  ln -s "$dir/001.vdr" "$tempdir/temp.vdr"
+  log_info "create a symbolic link from $dir/00001.ts to $tempdir/temp.vdr"
+  ln -s "$dir/00001.ts" "$tempdir/temp.vdr"
 
   if [ ! -e "$tempdir/temp.vdr" ]
   then
     log_info "could not create a symolic link"
-    log_info "try to copy $dir/001.vdr to $tempdir/temp.vdr"
-    execute "cp $dir/001.vdr $tempdir/temp.vdr"
+    log_info "try to copy $dir/00001.ts to $tempdir/temp.vdr"
+    execute "cp $dir/00001.ts $tempdir/temp.vdr"
   fi
 }
 
 
-function check_exe () {
+check_exe () {
 #
 # checks if $1 is a executable and exit the queuehandler with
 # rc $3, if this one is set
@@ -399,7 +399,7 @@ function check_exe () {
 }
 
 
-function encode () {
+encode () {
 #
 # encodes the movie
 #
@@ -439,7 +439,7 @@ function encode () {
           # convert mp2-files to ac3, because
           # mp2 isn't supported by ogm
 	  if [ "$dvd" ]; then dump_audio_mplayer; fi
-	  if [ $audio_id -lt 128 ]; then encode_ffmpeg; fi
+	  if [ $audio_id -ge 129 ]; then encode_ffmpeg; fi
 	  ;;
         *)
           log_error "unknown audio codec $acodec"
@@ -525,22 +525,22 @@ function encode () {
       # no dvd, ogm/matroska container
 
       # search for the first video-file
-      local num=0
+      local num=1
       while [ ! "$ifile" ]
       do
-        if [ ! -e "$tempdir/e$num.mpv" ]
+        if [ ! -e "$tempdir/0000$num.m2v" ]
 	then
-	  log_info "video-file $tempdir/e$num.mpv not found !"
+	  log_info "video-file $tempdir/0000$num.m2v not found !"
 	  if [ $num -ge 9 ]
 	  then
-	      log_error "no video-stream found !"
+	      log_error "no video-stream found ! $num"
               # exit loop
               local ifile="dummy"
 	    fi
-	    let num=num+1
+	    num=$((num+1))
         else	  
-	  log_info "video-file $tempdir/e$num.mpv found !"
-          local ifile="$tempdir/e$num.mpv"
+	  log_info "video-file $tempdir/0000$num.m2v found !"
+          local ifile="$tempdir/0000$num.m2v"
 	fi
       done
     fi
@@ -563,7 +563,7 @@ function encode () {
 }
 
 
-function dump_audio_mplayer() {
+dump_audio_mplayer() {
 #
 # dump audio-stream from dvd with mplayer
 #
@@ -577,31 +577,34 @@ function dump_audio_mplayer() {
 }
 
 
-function encode_ffmpeg() {
+encode_ffmpeg() {
 #
 # encode the audio-stream with ffmpeg
 #
   if [ "$error" ]; then return
   elif [ "$preview" = "1" ]; then return; fi
  
-  if [ $audio_id -ge 128 ]
+  if [ $audio_id -eq 128 ]
   then
     local ifile="$tempdir/bd.ac3"
   else
-    local ifile="$tempdir/c$audio_id.mpa"
+    local ifile="$tempdir/00001.mp2"
     local forceinput="-f mp3"
   fi
 
   case "$acodec" in 
     "lame")
       local filetype="mp3"
+      local filecodec="libmp3lame"
       ;;
     "ogg-vorbis")
       local filetype="ogg"
+      local filecodec="libvorbis"
       ;;
     "copy")
       log_info "ogm doesn't support mp2 audio-streams, i will convert it into ac3"
       local filetype="ac3"
+      local filecodec="ac3"
       ;;
     *)
       ;;
@@ -609,11 +612,11 @@ function encode_ffmpeg() {
 
   log_info "converting $ifile into $filetype-format"
   evecho "conv. audio into $filetype-format"
-  execute "$ffmpeg -hq -y $forceinput -i $ifile -ab $br_audio $tempdir/c$audio_id.$filetype"
+  execute "$ffmpeg -y $forceinput -i $ifile -ab ${br_audio}k -acodec $filecodec $tempdir/c$audio_id.$filetype"
 }
 
 
-function merge_ogm_mkv() {
+merge_ogm_mkv() {
   if [ "$error" ]; then return; fi
   if [ "$container" != "ogm" -a "$container" != "matroska" ]; then return; fi
     
@@ -642,7 +645,7 @@ function merge_ogm_mkv() {
 	local afile="$tempdir/c$audio_id.ogg"
 	;;
       "copy")
-        if [ $audio_id -ge 128 ]
+        if [ $audio_id -eq 128 ]
         then
           # ac3
 	  local afile="$tempdir/bd.ac3"
@@ -666,7 +669,7 @@ function merge_ogm_mkv() {
 }
 
 
-function cleanup () {
+cleanup () {
 #
 # delete temp-files and reset variables
 #
@@ -683,13 +686,11 @@ function cleanup () {
   then
     rm -f "$tempdir/$name.avi"
   fi
-  rm -f "$tempdir"/e[0-9].mpv
-  rm -f "$tempdir"/c[0-9].mpa
-  rm -f "$tempdir"/c[0-9].mp3
-  rm -f "$tempdir"/c[0-9].ogg
-  rm -f "$tempdir"/c[0-9].ac3
-  rm -f "$tempdir"/c[0-9][0-9][0-9].mp3
-  rm -f "$tempdir"/c[0-9][0-9][0-9].ogg
+  rm -f "$tempdir"/[0-9][0-9][0-9][0-9][0-9].m2v
+  rm -f "$tempdir"/[0-9][0-9][0-9][0-9][0-9].mp2
+  rm -f "$tempdir"/c*.mp3
+  rm -f "$tempdir"/c*.ogg
+  rm -f "$tempdir"/c*.ac3
   rm -f "$tempdir"/bd.ac3
 
   # temp. queuehandler-files
@@ -731,7 +732,7 @@ function cleanup () {
 }
 
 
-function del_queue () {
+del_queue () {
 #
 # delete first line from the queuefile
 #
@@ -750,7 +751,7 @@ function del_queue () {
   then
     rm -f "$queuefile"
   else
-    let lines=lines-1
+    lines=$((lines-1))
     cp -a "$queuefile" /tmp/queuefile.tmp
     tail -n $lines /tmp/queuefile.tmp > "$queuefile"
   fi
@@ -767,7 +768,7 @@ function del_queue () {
 }
 
 
-function split () {
+split () {
 #
 # splits the encoded movie into $filenumbers pieces
 #
@@ -785,7 +786,7 @@ function split () {
       local splitpos=0
 
       # workaround to get the correct filesize from mencoder with -endpos
-      let local splitsize=filesize*99/100
+      local splitsize=$((filesize*99/100))
       
       log_info "splitting $shortname in $filenumbers pieces"
       while [ $count -le $filenumbers ]
@@ -806,8 +807,8 @@ function split () {
         # detect length of splitted file and add it to $splitpos
         local length=`$mplayer -vo null -ao null -identify -frames 0 $tempdir/$ofile 2>/dev/null | \
                       grep ID_LENGTH | cut -d= -f2`
-        let splitpos=splitpos+length-overlap
-        let count=count+1
+        splitpos=$((splitpos+length-overlap))
+        count=$((count+1))
       done
       ;;
     "ogm")
@@ -823,7 +824,7 @@ function split () {
 }
 
 
-function vdrecho () {
+vdrecho () {
 #
 # echo $1 in the vdr-infobar (or console)
 #
@@ -840,17 +841,17 @@ function vdrecho () {
 }
 
 
-function evecho () {
+evecho () {
 #
 # echo $ in the file encode.vdrrip
 #
-  let step=step+1
+  step=$((step+1))
   local time=`date +"%k:%M h"`
   echo "- step $step/$steps (since $time): $1" > "$pluginsdir/encode.vdrrip"
 }
 
 
-function log_error () {
+log_error () {
 #
 # echo $1 on stderr and write it to the syslog with priority user.error
 #
@@ -866,7 +867,7 @@ function log_error () {
 }
 
 
-function log_info () {
+log_info () {
 #
 # echo $1 on stdout and write it to the syslog with priority user.info
 #
@@ -874,7 +875,7 @@ function log_info () {
 }
 
 
-function log_debug () {
+log_debug () {
 #
 # echo $1 on stdout and write it to the syslog with priority user.debug
 #
@@ -885,7 +886,7 @@ function log_debug () {
 }
 
 
-function execute () {
+execute () {
 #
 # executes $1 and checks the rc
 #
@@ -924,7 +925,7 @@ function execute () {
 }
 
 
-function rename () {
+rename () {
 #
 # renames the vdr recording to indicate it was encoded properly
 # this function is written by memed@www.vdrportal.de
@@ -943,7 +944,7 @@ function rename () {
 }
 
 
-function wait_unlock () {
+wait_unlock () {
 #
 # wait until the queuefile is unlocked
 #
@@ -961,7 +962,7 @@ function wait_unlock () {
 }
 
 
-function lock () {
+lock () {
 #
 # locks the queuefile
 #
@@ -975,7 +976,7 @@ function lock () {
 }
 
 
-function unlock () {
+unlock () {
 #
 # unlocks the queuefile
 #
@@ -987,7 +988,7 @@ function unlock () {
   fi
 }
 
-function _trap () {
+_trap () {
 #
 # this function is called if the queuehandler is killed
 #

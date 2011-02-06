@@ -70,7 +70,7 @@ char *strcol(char *s, char *d, int c) {
 }
 
 int strnumcol(const char *s, char *d) {
-  char *s1;
+  const char *s1;
   int i, l;
 
   // let's do some checks:

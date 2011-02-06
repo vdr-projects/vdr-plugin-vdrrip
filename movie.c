@@ -8,7 +8,13 @@
 #include <math.h>
 
 #ifdef VDRRIP_DVD
+#ifdef NEW_IFO_READ
+  #include <stdint.h>
+  #include <dvdread/ifo_read.h>
+  #include <dvdread/ifo_types.h>
+#else
   #include <dvdnav/ifo_read.h>
+#endif
 #endif //VDRRIP_DVD
 
 #include <vdr/plugin.h>
@@ -21,8 +27,8 @@
 
 #define SAVEFILE "save.vdrrip"
 
-#define IDENTCMD "%s \'%s\'%s -identify -frames 0 2>/dev/null | sed -e \'s/[`\\!$\"]/\\&/g\'"
-#define CROPCMD "%s \'%s\'%s -vo null -ao null -really-quiet -ss %i -frames %i -vop cropdetect 2>/dev/null | grep \"crop=\" | sed \"s/.*crop\\(.*\\)).*/\\1/\" | sort | uniq -c | sort -r"
+#define IDENTCMD "%s \'%s\'%s -identify -frames 1 -vo md5sum:outfile=/dev/null -ao null 2>/dev/null | sed -e \'s/[`\\!$\"]/\\&/g\'"
+#define CROPCMD "%s \'%s\'%s -vo null -ao null -quiet -ss %i -frames %i -vf cropdetect 2>/dev/null | grep \"crop=\" | sed \"s/.*crop\\(.*\\)).*/\\1/\" | sort | uniq -c | sort -r"
 #define AUDIOCMD "%s \'%s/001.vdr\' -vo null -ao null -frames 0 -aid %i 2>/dev/null | grep AUDIO"
 #define AUDIOCMDDVD "%s %s -vo null -ao null -frames 0 -aid %i 2>/dev/null | grep AUDIO"
 #define MENCCMD "%s %s help 2>/dev/null"
@@ -516,9 +522,33 @@ void cMovie::queryMpValuesVDR() {
     FREE(s);
 
     s = strcol(strgrep("ID_VIDEO_ASPECT", p), "=", 2);
+    if (s && atof(s) == 0.0) { // Workaround for mplayer-1.0rc1: search for second aspect line
+      s = strcol(strgrep("ID_VIDEO_ASPECT", p), "=", 2);
+      dsyslog("VDRRIP-FIX: searched for second aspect line: %s", s);
+    }
     if (s) {
       Aspect = atof(s);
+      if (Aspect == (double)(int)Aspect) { // Workaround for locale problems
+        if (strchr(s, '.'))
+          *strchr(s, '.') = ',';
+        else if (strchr(s, ','))
+          *strchr(s, ',') = '.';
+        dsyslog("VDRRIP-FIX: tried to solve locale problem: %s", s);
+        Aspect = atof(s);
+      }
     } else {Aspect = -1;}
+
+    if (Aspect <= 0.0) { // Workaround for mplayer-1.0pre7
+      pclose(p);
+      p = popen(cmd, "r");
+      if (p && strgrep("(aspect 3)", p)) {
+        Aspect = 1.7778; // 16:9
+        dsyslog("VDRRIP-FIX: found (aspect 3) - set aspect to 16:9");
+      } else {
+        Aspect = 1.3333; // 4:3
+        dsyslog("VDRRIP-FIX: (aspect 3) NOT found - set aspect to 4:3");
+      }
+    }
 
     CalcAspect = Aspect;
 

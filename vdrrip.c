@@ -132,13 +132,21 @@ cOsdObject *cPluginVdrrip::MainMenuAction(void)
   if (access(MPlayer, X_OK) == -1) {
     char *s = NULL;
     asprintf(&s, "%s doesn't exist or isn't a executable !", MPlayer);
+#if VDRVERSNUM >= 10307
+    Skins.Message(mtError, s);
+#else
     Interface->Error(s);
+#endif
     FREE(s);
     return NULL;
   } else if (access(MEncoder, X_OK) == -1) {
     char *s = NULL;
     asprintf(&s, "%s doesn't exist or isn't a executable !", MEncoder);
+#if VDRVERSNUM >= 10307
+    Skins.Message(mtError, s);
+#else
     Interface->Error(s);
+#endif
     FREE(s);
     return NULL;
   } else return new cMenuVdrrip();

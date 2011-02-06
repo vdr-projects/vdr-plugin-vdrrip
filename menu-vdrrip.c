@@ -4,9 +4,19 @@
 
 #include <vdr/plugin.h>
 #include <vdr/videodir.h>
+#if VDRVERSNUM >= 10307
+#include <vdr/interface.h>
+#include <vdr/status.h>
+#endif
 
 #ifdef VDRRIP_DVD
+#ifdef NEW_IFO_READ
+  #include <stdint.h>
+  #include <dvdread/ifo_read.h>
+  #include <dvdread/ifo_types.h>
+#else
   #include <dvdnav/ifo_read.h>
+#endif
 #endif //VDRRIP_DVD
 
 #include "menu-vdrrip.h"
@@ -92,14 +102,22 @@ eOSState cMenuVdrrip::ProcessKey(eKeys Key) {
 # ifdef VDRRIP_DVD
 
 cMenuVdrripWarning::cMenuVdrripWarning(const char *Title, const char *Text)
+#if VDRVERSNUM >= 10307
+:cMenuText(Title, "")
+#else
 :cOsdMenu(Title)
+#endif
 {
   bool warning;
   warning = true;
   //warning = false;
 
   if (warning) {
+#if VDRVERSNUM >= 10307
+    SetText(Text);
+#else
     Add(new cMenuTextItem(Text, 1, 2, Setup.OSDwidth - 2, MAXOSDITEMS, clrWhite, clrBackground, fontOsd));
+#endif
     SetHelp(tr("back"), tr("accept"), NULL, NULL);
     hadsubmenu = false;
   } else {
@@ -120,6 +138,22 @@ eOSState cMenuVdrripWarning::ProcessKey(eKeys Key)
   if (hadsubmenu) {return osBack;}
   
   switch (Key) {
+#if VDRVERSNUM >= 10307
+    // cMenuText::ProcessKey don't handle submenus
+    case kUp|k_Repeat:
+    case kUp:
+    case kDown|k_Repeat:
+    case kDown:
+    case kLeft|k_Repeat:
+    case kLeft:
+    case kRight|k_Repeat:
+    case kRight:
+      DisplayMenu()->Scroll(NORMALKEY(Key) == kUp || NORMALKEY(Key) == kLeft,
+                            NORMALKEY(Key) == kLeft || NORMALKEY(Key) == kRight);
+      cStatus::MsgOsdTextItem(NULL, NORMALKEY(Key) == kUp);
+      return osContinue;
+#endif
+
     case kRed: return osBack;
 
     case kGreen: {
@@ -138,13 +172,22 @@ bool cMenuVdrripWarning::CheckDVD() {
   ifo_handle_t *ifo_zero = NULL;
   ifo_handle_t *ifo_tmp = NULL;
 
+#if VDRVERSNUM >= 10307
+  Skins.Message(mtStatus, tr("checking dvd..."));
+  Skins.Flush();
+#else
   Interface->Status(tr("checking dvd..."));
   Interface->Flush();
+#endif
 
   if (access(DVD, R_OK) == -1) {
     char *s = NULL;
     asprintf(&s, "No read privileges on %s !", DVD);
+#if VDRVERSNUM >= 10307
+    Skins.Message(mtError, s);
+#else
     Interface->Error(s);
+#endif
     FREE(s);
     return false;
   }
@@ -160,7 +203,11 @@ bool cMenuVdrripWarning::CheckDVD() {
 	else {
 	  char *s = NULL;
 	  asprintf(&s, "Can't open ifo %d !", i);
+#if VDRVERSNUM >= 10307
+	  Skins.Message(mtError, s);
+#else
 	  Interface->Error(s);
+#endif
 	  FREE(s);
           DVDClose(dvd);
 	  return false;
@@ -171,14 +218,22 @@ bool cMenuVdrripWarning::CheckDVD() {
       return true;
     } else {
       DVDClose(dvd);
+#if VDRVERSNUM >= 10307
+      Skins.Message(mtError, "Can't open main ifo from dvd !");
+#else
       Interface->Error("Can't open main ifo from dvd !");
+#endif
       return false;
     }
   }
  
   char *s = NULL;
   asprintf(&s, "Can 't open %s !", DVD);
+#if VDRVERSNUM >= 10307
+  Skins.Message(mtError, s);
+#else
   Interface->Error(s);
+#endif
   FREE(s);
   return false;
 }
@@ -190,8 +245,13 @@ bool cMenuVdrripWarning::CheckDVD() {
 cMenuVdrripEncode::cMenuVdrripEncode():cOsdMenu(tr("encode vdr-recording")) {
   R = NULL;
   
+#if VDRVERSNUM >= 10307
+  Skins.Message(mtStatus, tr("scanning recordings..."));
+  Skins.Flush();
+#else
   Interface->Status(tr("scanning recordings..."));
   Interface->Flush();
+#endif
 
   R = new cVdrripRecordings;
   Set();
@@ -259,7 +319,13 @@ void cMenuVdrripQueue::Set() {
     FREE(s1);
   }
 
-  if (Q->getLockStat()) {Interface->Error(tr("the queuefile is locked by the queuehandler !"));}
+  if (Q->getLockStat()) {
+#if VDRVERSNUM >= 10307
+    Skins.Message(mtError, tr("the queuefile is locked by the queuehandler !"));
+#else
+    Interface->Error(tr("the queuefile is locked by the queuehandler !"));
+#endif
+  }
 
   SetHelpKeys();
 }
@@ -353,10 +419,12 @@ void cMenuVdrripQueue::SetHelpKeys() {
 }
 
 void cMenuVdrripQueue::AddColItem(cOsdItem *i) {
+#if VDRVERSNUM < 10307
 #ifdef clrScrolLine
    i->SetColor(clrScrolLine, clrBackground);
 #else
    i->SetColor(clrCyan, clrBackground);
+#endif
 #endif
 
   Add(i);
@@ -584,10 +652,12 @@ eOSState cMenuVdrripEditTemplate::ProcessKey(eKeys Key) {
 }
 
 void cMenuVdrripEditTemplate::AddColItem(cOsdItem *i) {
+#if VDRVERSNUM < 10307
 #ifdef clrScrolLine
    i->SetColor(clrScrolLine, clrBackground);
 #else
    i->SetColor(clrCyan, clrBackground);
+#endif
 #endif
 
   Add(i);
@@ -600,8 +670,13 @@ cMenuVdrripMovie::cMenuVdrripMovie(char *p, char *n):cOsdMenu(tr("encode movie")
   MovOSDsaveName = NULL;
   FileSize[0] = MovieData[0] = CropData[0] = ScaleData[0] = NULL;
   
+#if VDRVERSNUM >= 10307
+  Skins.Message(mtStatus, tr("reading movie-data..."));
+  Skins.Flush();
+#else
   Interface->Status(tr("reading movie-data..."));
   Interface->Flush();
+#endif
 
   M = new cMovie(p, n);
   Init(); 
@@ -888,8 +963,13 @@ void cMenuVdrripMovie::OSDChange() {
 
 #ifdef VDRRIP_DVD
   } else if (M->isDVD() && MovOSD.Title != MovOSDsave.Title && MovOSD.Title > 0) {
+#if VDRVERSNUM >= 10307
+    Skins.Message(mtStatus, tr("reading audio-data from dvd..."));
+    Skins.Flush();
+#else
     Interface->Status(tr("reading audio-data from dvd..."));
     Interface->Flush();
+#endif
     M->setDVDTitle(MovOSD.Title, true);
     M->saveMovieData();
     Set();
@@ -1067,7 +1147,13 @@ eOSState cMenuVdrripMovie::ProcessKey(eKeys Key) {
             FREE(q);
             DELETE(Q);
             return osBack;
-          } else {Interface->Error(tr("the queuefile is locked by the queuehandler !"));}
+          } else {
+#if VDRVERSNUM >= 10307
+	    Skins.Message(mtError, tr("the queuefile is locked by the queuehandler !"));
+#else
+	    Interface->Error(tr("the queuefile is locked by the queuehandler !"));
+#endif
+	  }
 
           FREE(q);
           DELETE(Q);
@@ -1089,11 +1175,20 @@ eOSState cMenuVdrripMovie::ProcessKey(eKeys Key) {
 	  } else {
 	    if (Interface->Confirm(tr("crop black movie boarders ?"))) {
 	      CropReset = true;
+#if VDRVERSNUM >= 10307
+	      Skins.Message(mtStatus, tr("search for black movie boarders"));
+	      Skins.Flush();
+#else
               Interface->Status(tr("search for black movie boarders"));
 	      Interface->Flush();
+#endif
               if (! M->setCropValues()) {
 		CropReset = false;
+#if VDRVERSNUM >= 10307
+		Skins.Message(mtError, tr("couldn't detect black movie boarders !"));
+#else
 		Interface->Error(tr("couldn't detect black movie boarders !"));
+#endif
 	      }
 	      M->saveMovieData();
             }
@@ -1133,10 +1228,12 @@ eOSState cMenuVdrripMovie::ProcessKey(eKeys Key) {
 }
 
 void cMenuVdrripMovie::AddColItem(cOsdItem *i) {
+#if VDRVERSNUM < 10307
 #ifdef clrScrolLine
    i->SetColor(clrScrolLine, clrBackground);
 #else
    i->SetColor(clrCyan, clrBackground);
+#endif
 #endif
 
   Add(i);
@@ -1163,8 +1260,13 @@ eOSState cMenuVdrripMovieTitles::ProcessKey(eKeys Key) {
   eOSState state = cOsdMenu::ProcessKey(Key);
 
   if (Key == kOk) {
+#if VDRVERSNUM >= 10307
+    Skins.Message(mtStatus, tr("reading audio-data from dvd..."));
+    Skins.Flush();
+#else
     Interface->Status(tr("reading audio-data from dvd..."));
     Interface->Flush();
+#endif
     M->setDVDTitle(Current() + 1, true);
     M->saveMovieData();
     return osBack;

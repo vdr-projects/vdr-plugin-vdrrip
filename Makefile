@@ -34,7 +34,7 @@ TMPDIR = /tmp
 
 ### The version number of VDR (taken from VDR's "config.h"):
 
-VDRVERSION = $(shell grep 'define VDRVERSION ' $(VDRDIR)/config.h | awk '{ print $$3 }' | sed -e 's/"//g')
+APIVERSION = $(shell grep 'define APIVERSION ' $(VDRDIR)/config.h | awk '{ print $$3 }' | sed -e 's/"//g')
 
 ### The name of the distribution archive:
 
@@ -45,7 +45,12 @@ PACKAGE = vdr-$(ARCHIVE)
 
 INCLUDES += -I$(VDRDIR)/include -I$(DVBDIR)/include
 
-DEFINES += -D_GNU_SOURCE -DPLUGIN_NAME_I18N='"$(PLUGIN)"'
+DEFINES += -D_GNU_SOURCE -DPLUGIN_NAME_I18N='"$(PLUGIN)"' -D__STDC_LIMIT_MACROS
+
+NEW_IFO_READ := $(wildcard /usr/include/dvdread/ifo_read.h)
+ifneq ($(strip $(NEW_IFO_READ)),)
+  DEFINES  += -DNEW_IFO_READ
+endif
 
 ### The object files (add further files here):
 
@@ -77,7 +82,7 @@ all: libvdr-$(PLUGIN).so
 
 libvdr-$(PLUGIN).so: $(OBJS)
 	$(CXX) $(CXXFLAGS) -shared $(OBJS) $(LIBS) -o $@
-	@cp $@ $(LIBDIR)/$@.$(VDRVERSION)
+	@cp $@ $(LIBDIR)/$@.$(APIVERSION)
 
 dist: clean
 	@-rm -rf $(TMPDIR)/$(ARCHIVE)

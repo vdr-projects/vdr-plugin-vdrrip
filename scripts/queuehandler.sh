@@ -92,6 +92,7 @@ function initialize () {
     log_error "usage: $scriptname queuefile tempdir" 1
   fi
 
+  mkdir -p "$tempdir"
   if [ ! -d "$tempdir" ]
   then
     log_error "directory $tempdir doesn't exist, aborting !" 1
@@ -101,7 +102,7 @@ function initialize () {
 
   local pids=`pgrep -d" " "$scriptname"`
   local pid1=`echo "$pids" | cut -d" " -f1`
-  local pid2=`echo "$pids" | cut -d" " -f3`
+  local pid2=`echo "$pids" | cut -d" " -f2`
 
   if [ "$pid1" != "$pid2" ]
   then
@@ -215,6 +216,17 @@ function pre_check () {
     mp=$mplayer
   fi
 
+  # change the dvd-parameter to -dvd if the mencoder-version is 0.XX
+  if [ "$dvd" ]
+  then
+    local menc_ver=`$mc -v 2>/dev/null | grep "MEncoder" | sed "s/^MEncoder \(.\).*/\1/"`
+    if [ "$menc_ver" = "0" ]
+    then
+      dvd=`echo "$dvd" | sed "s/^dvd:\/\//-dvd /"`
+    fi
+    log_debug "dvd: $dvd"
+  fi
+
   # check needed tools  
   case "$container" in
     "avi")
@@ -303,8 +315,8 @@ function preview () {
   shortname="$shortname(preview)"
   
   # start the preview in the middle of the movie
-  local length=`"$mp" -identify -frames 0 "$dir/001.vdr" 2>/dev/null | grep ID_LENGTH | cut -d"=" -f2`
-  let local ss=length/2
+  local length=`"$mp" -vo null -ao null -identify -frames 0 "$dir/001.vdr" 2>/dev/null | grep ID_LENGTH | cut -d"=" -f2`
+  let local ss=$(echo $length | sed -e s/[.,].*//)/2
   previewval="-ss $ss -endpos $previewlength"
 }
 
@@ -315,6 +327,11 @@ function prepare() {
 #
   if [ "$error" ]; then return
   elif [ "$dvd" ]; then return; fi
+
+  # Recreate $tempdir if removed by vdr housekeeping
+  mkdir -p "$tempdir"
+  if [ ! -d "$tempdir" ]; then return; fi
+  cd "$tempdir"
 
   case "$container" in
     "avi")
@@ -337,6 +354,11 @@ function prepare() {
         log_info "demuxing all vdr-files from directory $dir"
 	evecho "demuxing vdr-files"
         execute "$vdrsync $dir -o $tempdir"
+	# vdrsync 0.1.2.2 developer version creates bd.mpa
+	if [ -e "$tempdir/bd.mpa" ]
+	then
+	  mv "$tempdir/bd.mpa" "$tempdir/bd.ac3"
+	fi
       fi
       ;;
     *)
@@ -443,7 +465,7 @@ function encode () {
       ;;
   esac
 
-  # set mencoder -vop values
+  # set mencoder -vf values
   if [ "$crop_w" = "-1" -a "$crop_h" = "-1" -a "$crop_x" = "-1" -a \
        "$crop_y" = "-1" -a "$scale_w" = "-1" -a "$scale_h" = "-1" ]
   then
@@ -453,15 +475,15 @@ function encode () {
   then
     local vopopts="scale=$scale_w:$scale_h"
   else
-    local vopopts="scale=$scale_w:$scale_h,crop=$crop_w:$crop_h:$crop_x:$crop_y"
+    local vopopts="crop=$crop_w:$crop_h:$crop_x:$crop_y,scale=$scale_w:$scale_h"
   fi
 
   if [ "$ppvalues" ]
   then
-    local vopopts="-vop pp=$ppvalues,$vopopts"
+    local vopopts="-vf pp=$ppvalues,$vopopts"
   elif [ "$vopopts" ]
   then
-    local vopopts="-vop $vopopts"
+    local vopopts="-vf $vopopts"
   fi
 
   # encode in two passes 
@@ -729,8 +751,8 @@ function del_queue () {
     rm -f "$queuefile"
   else
     let lines=lines-1
-    tail -n $lines "$queuefile" > /tmp/queuefile.tmp
-    mv /tmp/queuefile.tmp $queuefile
+    cp -a "$queuefile" /tmp/queuefile.tmp
+    tail -n $lines /tmp/queuefile.tmp > "$queuefile"
   fi
 
   if [ "$error" ]
@@ -782,7 +804,7 @@ function split () {
                  -ss $splitpos $endpos -o $tempdir/$ofile"
 	
         # detect length of splitted file and add it to $splitpos
-        local length=`$mplayer -identify -frames 0 $tempdir/$ofile 2>/dev/null | \
+        local length=`$mplayer -vo null -ao null -identify -frames 0 $tempdir/$ofile 2>/dev/null | \
                       grep ID_LENGTH | cut -d= -f2`
         let splitpos=splitpos+length-overlap
         let count=count+1

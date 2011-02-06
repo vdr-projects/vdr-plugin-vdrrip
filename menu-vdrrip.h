@@ -7,6 +7,10 @@
 
 #include <vdr/osd.h>
 #include <vdr/menuitems.h>
+#if VDRVERSNUM >= 10307
+#include <vdr/menu.h>
+#include <vdr/skins.h>
+#endif
 
 #include "movie.h"
 #include "vdrriprecordings.h"
@@ -51,7 +55,12 @@ public:
 
 #ifdef VDRRIP_DVD
 
-class cMenuVdrripWarning : public cOsdMenu {
+class cMenuVdrripWarning
+#if VDRVERSNUM >= 10307
+  : public cMenuText {
+#else
+  : public cOsdMenu {
+#endif
 private:
   bool hadsubmenu;
 

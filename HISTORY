@@ -112,3 +112,27 @@ VDR Plugin 'vdrrip' Revision History
   (requested by mrmoe@www.vdrportal.de)
 - check for mplayer&mencoder (requested by hapemo@www.vdrportal.de)
 - some cosmetic changes in queue.c
+
+2010-02-06: Version 0.3.2
+- Changed maintainer
+- Merged many patches from e-tobi's debian source package:
+    * patches by Thomas Günther <tom@toms-cafe.de>
+      - maketempdir patch to create temporary directory
+      - greppid2 patch to detect second running process instead of third
+      - fix ogm/ac3 vdrsync 0.1.2.2dev1 creates bd.mpa, not bd.ac3 when
+        demuxing
+      - preserve owner of queue.vdrrip in queuehandler.sh
+      - fix identification of aspect ratio
+        (http://vdrportal.de/board/thread.php?threadid=53225 and
+         http://vdrportal.de/board/thread.php?threadid=58775)
+      - change VDRVERSION define to APIVERSION in Makefile
+      - fix some menus for vdr>=1.3.7 (by user norad at vdrportal.de & thomas)
+    * patch by Herbert Attenberger <herbsl at a-land.de> and user micmac 
+      at vdrportal.de to change dvd-parameter to -dvd if the mencoder-version
+      is 0.XX
+    * patch by Stefan Wagner to change mencoder parameters when detecting
+      cropping
+    * patches by Tobias Grimm <etobi@debian.org>
+      - use libdvdread's NEW_IFO_READ functions
+      - fix compilation for gcc4.4
+

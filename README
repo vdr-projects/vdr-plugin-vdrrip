@@ -1,10 +1,13 @@
 This is a "plugin" for the Video Disk Recorder (VDR).
 
-Written by:                  herbert attenberger <herbsl at a-land.de>
+Originally Written by:       herbert attenberger <herbsl at a-land.de>
 
-Project's homepage:          <http://www.a-land.de>
+Now supported by:            daniel meyerholt <dxm523@googlemail.com>
 
-Latest version available at: <http://www.a-land.de>
+Original Project's homepage: <http://www.a-land.de>
+
+Current homepage:
+              <http://projects.vdr-developer.org/projects/plg-vdrrip>
 
 See the file COPYING for license information.
 

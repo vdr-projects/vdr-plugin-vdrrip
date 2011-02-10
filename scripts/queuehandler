@@ -167,6 +167,14 @@ read_queue () {
     local mode="full"
   fi
   
+  if [ -e ${dir}/001.vdr ]
+  then
+  	recGeneration="old"
+  else
+        recGeneration="new"
+  fi
+  	
+  
   log_info "### start encoding movie $shortname in $mode mode ###"
 
   log_debug "version of queuehandler: $qh_ver"
@@ -192,6 +200,7 @@ read_queue () {
   log_debug "rename: $rename"
   log_debug "container: $container"
   log_debug "preview: $preview"
+  log_debug "recGeneration: $recGeneration"
 }
 
 
@@ -285,7 +294,7 @@ calc_steps () {
     "avi")
       steps=$((steps-4))
       if [ "$dvd" ]; then steps=$((steps-1))
-      elif [ ! -e "$dir/00002.ts" ]; then steps=$((steps-1)); fi
+      elif [ ! -e "$dir/00002.ts" -o ! -e "$dir/002.vdr" ]; then steps=$((steps-1)); fi
       ;;
     "ogm")
       steps=$((steps-2))
@@ -315,7 +324,9 @@ preview () {
   shortname="$shortname(preview)"
   
   # start the preview in the middle of the movie
-  local length=`"$mp" -vo null -ao null -identify -frames 0 "$dir/00001.ts" 2>/dev/null | grep ID_LENGTH | cut -d"=" -f2`
+  local prevfile
+  if [ $recGeneration = "old" ]; then prevfile="001.vdr"; else prevfile="00001.ts";fi
+  local length=`"$mp" -vo null -ao null -identify -frames 0 "$dir/$prevfile" 2>/dev/null | grep ID_LENGTH | cut -d"=" -f2`
   local ss=$(($(echo $length | sed -e s/[.,].*//)/2))
   previewval="-ss $ss -endpos $previewlength"
 }
@@ -336,11 +347,19 @@ prepare() {
   case "$container" in
     "avi")
       # join all vdr-files to $tempdir/temp.vdr
-      if [ -e "$dir/00002.ts" -a "$preview" != "1" ]
+      local prevfile
+      if [ $recGeneration = "old" ]; then prevfile="002.vdr"; else prevfile="00002.ts";fi
+  
+      if [ -e "$dir/$prevfile" -a "$preview" != "1" ]
       then
         log_info "joining all vdr-files from directory $dir"
 	evecho "joining vdr-files"
-        nice -+19 cat $dir/[0-9][0-9][0-9][0-9][0-9].ts > "$tempdir/temp.vdr"
+	if [ $recGeneration = "new" ]
+	then
+         nice -+19 cat $dir/[0-9][0-9][0-9][0-9][0-9].ts > "$tempdir/temp.vdr"
+        else
+         nice -+19 cat $dir/[0-9][0-9][0-9].vdr > "$tempdir/temp.vdr"
+        fi
      else
 	create_symbolic_link
       fi
@@ -353,7 +372,14 @@ prepare() {
       else
         log_info "demuxing all vdr-files from directory $dir"
 	evecho "demuxing vdr-files"
-        execute "$projectx -demux $dir/0*.ts -out $tempdir"
+        if [ $recGeneration = "new" ]
+	  then
+	      execute "$projectx -demux $dir/0*.ts -out $tempdir"
+	  else
+	      execute "$projectx -demux $dir/0*.vdr -out $tempdir"
+	      mv $tempdir/001.m2v $tempdir/00001.m2v
+	      mv $tempdir/001.mp2 $tempdir/00001.mp2
+	fi
 	# vdrsync 0.1.2.2 developer version creates bd.mpa
 	if [ -e "$tempdir/bd.mpa" ]
 	then
@@ -374,14 +400,24 @@ create_symbolic_link() {
   if [ "$error" ]; then return
   elif [ "$dvd" ]; then return; fi
 
-  log_info "create a symbolic link from $dir/00001.ts to $tempdir/temp.vdr"
-  ln -s "$dir/00001.ts" "$tempdir/temp.vdr"
+  log_info "create a symbolic link from $dir/ to $tempdir/temp.vdr"
+  if [ $recGeneration = "new"]
+  then
+    ln -s "$dir/00001.ts" "$tempdir/temp.vdr"
+  else
+    ln -s "$dir/001.vdr" "$tempdir/temp.vdr"
+  fi
 
   if [ ! -e "$tempdir/temp.vdr" ]
   then
     log_info "could not create a symolic link"
-    log_info "try to copy $dir/00001.ts to $tempdir/temp.vdr"
-    execute "cp $dir/00001.ts $tempdir/temp.vdr"
+    log_info "try to copy the file"
+    if [ $recGeneration = "new"]
+    then
+      execute "cp $dir/00001.ts $tempdir/temp.vdr"
+    else
+      execute "cp $dir/001.vdr $tempdir/temp.vdr"
+    fi
   fi
 }
 
@@ -679,7 +715,7 @@ cleanup () {
   rm -f "$tempdir/analyse.log"
   rm -f "$tempdir/c:\\trace_b.txt"
   rm -f "$tempdir/xvid-twopass.stats"
-
+  rm -f "$tempdir/00001_log.txt"
   # temp. movie-files
   rm -f "$tempdir/temp.vdr"
   if [ "$container" = "ogm" -o "$container" = "matroska" ]
@@ -720,7 +756,8 @@ cleanup () {
   rename=""
   container=""
   preview=""
-
+  recGeneration=""
+  
   mc=""
   mp=""
   

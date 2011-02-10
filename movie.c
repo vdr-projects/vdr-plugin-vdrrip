@@ -500,7 +500,12 @@ void cMovie::setLengthVDR() {
   FILE *f = fopen(file, "r");
   if (f) {
     fseek(f, 0, SEEK_END);
-    Length = ftell(f) / 200;
+    if (OldRecording) {
+    	Length = ftell(f) / 200;
+    } else {
+    	Length = 30000; //FIXME urgent
+    }
+    dsyslog ("[vdrrip] length: %i ",Length);
     fclose(f);
   } else {
       dsyslog("[vdrrip] could not open file %s !", file);

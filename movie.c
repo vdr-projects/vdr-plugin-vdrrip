@@ -582,7 +582,7 @@ void cMovie::queryAudioDataVDR() {
   int c = 0;
   
   // Get Audio PID
-  if (OldRecording) {
+  if (!OldRecording) {
     asprintf(&cmd, AUDIOPID, MPlayer, Dir);
     FILE *apid = popen(cmd,"r");
     isyslog ("Getting Audio PID of ts: %s",cmd);

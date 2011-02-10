@@ -30,7 +30,7 @@
 #define IDENTCMD "%s \'%s\'%s -identify -frames 1 -vo md5sum:outfile=/dev/null -ao null 2>/dev/null | sed -e \'s/[`\\!$\"]/\\&/g\'"
 #define CROPCMD "%s \'%s\'%s -vo null -ao null -quiet -ss %i -frames %i -vf cropdetect 2>/dev/null | grep \"crop=\" | sed \"s/.*crop\\(.*\\)).*/\\1/\" | sort | uniq -c | sort -r"
 #define AUDIOPID "%s \'%s/00001.ts\' -vo null -ao null -frames 0 2>/dev/null | grep \"AUDIO MPA(pid\" | cut -d \')\' -f2 | cut -d \'=\' -f 2"
-#define AUDIOCMD "%s \'%s/00001.ts\' -vo null -ao null -frames 0 -aid %i 2>/dev/null | grep ^AUDIO"
+#define AUDIOCMD "%s \'%s/%s\' -vo null -ao null -frames 0 -aid %i 2>/dev/null | grep ^AUDIO"
 #define AUDIOCMDDVD "%s %s -vo null -ao null -frames 0 -aid %i 2>/dev/null | grep ^AUDIO"
 #define MENCCMD "%s %s help 2>/dev/null"
 
@@ -61,6 +61,7 @@ cMovie::cMovie(char *d, char *n) {
   // init some values
   AudioID = 0;
   initCropValues();
+  OldRecording =false;
 
   if (strstr(Dir, "dvd://")) {
     Dvd = true;
@@ -80,6 +81,17 @@ cMovie::cMovie(char *d, char *n) {
 #endif //VDRRIP_DVD
   } else {
     Dvd = false;
+    // Detect old recording
+    char *oldfilename = NULL;
+    asprintf(&oldfilename, "%s/001.vdr", Dir);
+    FILE *fCheck=fopen(oldfilename,"r");
+    if (fCheck != NULL) {
+    	OldRecording = true;
+    	fclose(fCheck);
+    	dsyslog("[vdrrip] Pre 1.7 recording detected");
+    }
+    FREE(oldfilename);
+
 
     // detect vdr-data
     setLengthVDR();
@@ -297,7 +309,9 @@ bool cMovie::setCropValues() {
   int l1;
 
   if (Dvd) {asprintf(&cmd, IDENTCMD, MPlayer, Dir, "");
-  } else {asprintf(&cmd, IDENTCMD, MPlayer, Dir, "/00001.ts");}
+  } else {
+    asprintf(&cmd, IDENTCMD, MPlayer, Dir, OldRecording?"/001.vdr":"/00001.ts");
+  }
 
   FILE *p = popen(cmd, "r");
   if (p) {
@@ -317,8 +331,8 @@ bool cMovie::setCropValues() {
     asprintf(&cmd, CROPCMD, MPlayer, Dir, "", l/2, l1);
     isyslog("[vdrrip] detecting crop values in %s", Dir);
   } else {
-    asprintf(&cmd, CROPCMD, MPlayer, Dir, "/00001.ts", l/2, l1);
-    isyslog("[vdrrip] detecting crop values in %s/00001.ts", Dir);
+    asprintf(&cmd, CROPCMD, MPlayer, Dir, OldRecording?"/001.vdr":"/00001.ts", l/2, l1);
+    isyslog("[vdrrip] detecting crop values of %s", Dir);
   }
   p = popen(cmd, "r");
   FREE(cmd);
@@ -482,7 +496,7 @@ const char* cMovie::getPPValues() {return PPValues;}
 void cMovie::setLengthVDR() {
   char *file = NULL;
 
-  asprintf(&file, "%s/index", Dir);
+  asprintf(&file, OldRecording?"%s/index.vdr":"%s/index", Dir);
   FILE *f = fopen(file, "r");
   if (f) {
     fseek(f, 0, SEEK_END);
@@ -501,7 +515,7 @@ void cMovie::setLengthVDR() {
 void cMovie::queryMpValuesVDR() {
   char *cmd = NULL, *s = NULL;
 
-  asprintf(&cmd, IDENTCMD, MPlayer, Dir, "/00001.ts");
+  asprintf(&cmd, IDENTCMD, MPlayer, Dir, OldRecording?"/001.vdr":"/00001.ts");
   FILE *p = popen(cmd, "r");
   if (p) {
     s = strcol(strgrep("ID_VIDEO_WIDTH", p), "=", 2);
@@ -565,22 +579,26 @@ void cMovie::queryAudioDataVDR() {
   char *cmd = NULL, *buf = NULL;
   size_t i = 0;
   int n = 0;
+  int c = 0;
   
   // Get Audio PID
-  asprintf(&cmd, AUDIOPID, MPlayer, Dir);
-  FILE *apid = popen(cmd,"r");
-  isyslog ("Getting Audio PID of ts: %s",cmd);
-  int c = 0;
-  if (apid && getline(&buf,&i,apid) != -1) {
-      c = atoi (buf);
+  if (OldRecording) {
+    asprintf(&cmd, AUDIOPID, MPlayer, Dir);
+    FILE *apid = popen(cmd,"r");
+    isyslog ("Getting Audio PID of ts: %s",cmd);
+
+    if (apid && getline(&buf,&i,apid) != -1) {
+        c = atoi (buf);
+    }
+    pclose(apid);
+    isyslog("Pid selected : %i",c);
   }
-  pclose(apid);
-  isyslog("Pid selected : %i",c);
   
   bool next = true;
 
   while (next) {
-    asprintf(&cmd, AUDIOCMD, MPlayer, Dir, c);
+	  // TODO: fix ac3 detection
+    asprintf(&cmd, AUDIOCMD, MPlayer, Dir,OldRecording?"001.vdr":"00001.ts", c);
     FILE *p = popen(cmd, "r");
     if (p) {
       if (getline(&buf, &i, p) != -1) {

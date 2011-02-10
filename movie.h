@@ -39,6 +39,7 @@ struct AudioData {
 class cMovie {
   protected:
     bool Dvd;
+    bool OldRecording;
     
     char *OrigName;
     char *Name;

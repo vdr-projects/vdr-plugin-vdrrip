@@ -18,7 +18,7 @@
 #endif //VDRRIP_DVD
 
 #include <vdr/plugin.h>
-
+#include <vdr/recording.h>
 #include "movie.h"
 #include "menu-vdrrip.h"
 #include "a-tools.h"
@@ -494,29 +494,15 @@ const char* cMovie::getPPValues() {return PPValues;}
 
 
 void cMovie::setLengthVDR() {
-  char *file = NULL;
-
-  asprintf(&file, OldRecording?"%s/index.vdr":"%s/index", Dir);
-  FILE *f = fopen(file, "r");
-  if (f) {
-    fseek(f, 0, SEEK_END);
-    if (OldRecording) {
-    	Length = ftell(f) / 200;
-    } else {
-    	Length = 30000; //FIXME urgent
-    }
-    dsyslog ("[vdrrip] length: %i ",Length);
-    fclose(f);
-  } else {
-      dsyslog("[vdrrip] could not open file %s !", file);
-      dsyslog("[vdrrip] perhaps you have to create it with genindex.c !");
-      Length = -1;
-  }
-
-  FREE(file);
+  cRecordingInfo *crec= new cRecordingInfo(Dir);
+  cIndexFile *ifile = new cIndexFile(Dir,false,OldRecording);
+  Length = ifile->Last()/ crec->FramesPerSecond();
+  delete(ifile);
+  delete(crec);
+  dsyslog ("[vdrrip] length: %i ",Length);
 }
 
-
+//TODO: maybe get these out of cRecordingInfo et al. ?
 void cMovie::queryMpValuesVDR() {
   char *cmd = NULL, *s = NULL;
 

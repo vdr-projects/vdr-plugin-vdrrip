@@ -716,6 +716,7 @@ cleanup () {
   rm -f "$tempdir/c:\\trace_b.txt"
   rm -f "$tempdir/xvid-twopass.stats"
   rm -f "$tempdir/00001_log.txt"
+  rm -f "$tempdir/001_log.txt"
   # temp. movie-files
   rm -f "$tempdir/temp.vdr"
   if [ "$container" = "ogm" -o "$container" = "matroska" ]

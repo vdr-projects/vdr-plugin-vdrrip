@@ -401,7 +401,7 @@ create_symbolic_link() {
   elif [ "$dvd" ]; then return; fi
 
   log_info "create a symbolic link from $dir/ to $tempdir/temp.vdr"
-  if [ $recGeneration = "new"]
+  if [ $recGeneration = "new" ]
   then
     ln -s "$dir/00001.ts" "$tempdir/temp.vdr"
   else
@@ -412,7 +412,7 @@ create_symbolic_link() {
   then
     log_info "could not create a symolic link"
     log_info "try to copy the file"
-    if [ $recGeneration = "new"]
+    if [ $recGeneration = "new" ]
     then
       execute "cp $dir/00001.ts $tempdir/temp.vdr"
     else

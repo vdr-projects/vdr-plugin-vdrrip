@@ -31,7 +31,7 @@ char *strsub(char* s, int p, int n) {
   return s1;
 } 
 
-char *strcol(char *s, char *d, int c) {
+char *strcol(char *s,const char *d, int c) {
   char *s1, *s2;
   int i;
   int l, l1;
@@ -69,7 +69,7 @@ char *strcol(char *s, char *d, int c) {
   return s2;
 }
 
-int strnumcol(const char *s, char *d) {
+int strnumcol(const char *s, const char *d) {
   const char *s1;
   int i, l;
 
@@ -90,7 +90,7 @@ int strnumcol(const char *s, char *d) {
   return i;
 }
 
-char *strgrep(char *s, FILE *f) {
+char *strgrep(const char *s, FILE *f) {
   char *s1 = "";
   size_t i = 0;
 

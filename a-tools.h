@@ -12,11 +12,11 @@
 
 char *strsub(char *s, int p, int numbers);
 
-char *strcol(char *s, char *d, int c);
+char *strcol(char *s,const char *d, int c);
 
-int strnumcol(const char *s, char *d);
+int strnumcol(const char *s, const char *d);
 
-char *strgrep(char *s, FILE *f);
+char *strgrep(const char *s, FILE *f);
 
 int roundValue(int i, int i1);
 

@@ -103,7 +103,7 @@ void cTemplate::Save() {
 
 int cTemplate::getNumTemplates() {return NumTemplates;}
 
-int cTemplate::getNumTemplate(char *t) {
+int cTemplate::getNumTemplate(const char *t) {
   int c;
 
   if (t) {
@@ -124,7 +124,7 @@ char **cTemplate::getTNames() {
   return TNames;
 }
 
-int cTemplate::New(char *n) {
+int cTemplate::New(const char *n) {
   T = (struct TemplateData*)realloc(T, ((NumTemplates + 1) * sizeof(struct TemplateData)));
   T[NumTemplates].Name         = strdup(n);
   T[NumTemplates].FileSize     = 700;

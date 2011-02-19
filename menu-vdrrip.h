@@ -161,7 +161,7 @@ private:
   bool hadsubmenu;
 
 public:
-  cMenuVdrripMovie(char *p, char *n);
+  cMenuVdrripMovie(const char *p, const char *n);
   ~cMenuVdrripMovie();
   virtual eOSState ProcessKey(eKeys Key);
 };

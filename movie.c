@@ -37,7 +37,7 @@
 // --- cMovie ------------------------------------------------------------
 
 
-cMovie::cMovie(char *d, char *n) {
+cMovie::cMovie(const char *d, const char *n) {
   C = NULL;
   T = NULL;
 #ifdef VDRRIP_DVD

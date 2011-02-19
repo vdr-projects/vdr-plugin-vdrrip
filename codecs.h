@@ -25,9 +25,9 @@ class cCodecs {
   char *getVCodec(int i);
   char *getACodec(int i);
   char *getContainer(int i);
-  int getNumVCodec(char *v);
-  int getNumACodec(char *a);
-  int getNumContainer(char *c);
+  int getNumVCodec(const char *v);
+  int getNumACodec(const char *a);
+  int getNumContainer(const char *c);
   char **getACodecs();
   char **getVCodecs();
   char **getContainers();

@@ -145,7 +145,7 @@ char *cCodecs::getACodec(int i) {return ACodecs[i];}
 
 char *cCodecs::getContainer(int i) {return Containers[i];}
 
-int cCodecs::getNumVCodec(char *v) {
+int cCodecs::getNumVCodec(const char *v) {
   int i = 0;
 
   // check if there are video codecs available
@@ -165,7 +165,7 @@ int cCodecs::getNumVCodec(char *v) {
   return i;
 }
 
-int cCodecs::getNumACodec(char *a) {
+int cCodecs::getNumACodec(const char *a) {
   int i = 0;
 
   // check if there are audio codecs available
@@ -185,7 +185,7 @@ int cCodecs::getNumACodec(char *a) {
   return i;
 }
 
-int cCodecs::getNumContainer(char *c) {
+int cCodecs::getNumContainer(const char *c) {
   int i = 0;
 
   while (strcmp(c, Containers[i]) != 0) {

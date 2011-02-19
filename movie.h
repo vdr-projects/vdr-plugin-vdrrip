@@ -85,7 +85,7 @@ class cMovie {
 #endif
     
   public:
-    cMovie(char *d, char *n);
+    cMovie(const char *d, const char *n);
     ~cMovie();
 
     cTemplate *T;

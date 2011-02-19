@@ -665,7 +665,7 @@ void cMenuVdrripEditTemplate::AddColItem(cOsdItem *i) {
 
 // --- cMenuVdrripMovie ------------------------------------------------------
 
-cMenuVdrripMovie::cMenuVdrripMovie(char *p, char *n):cOsdMenu(tr("encode movie"), 15) {
+cMenuVdrripMovie::cMenuVdrripMovie(const char *p, const char *n):cOsdMenu(tr("encode movie"), 15) {
   M = NULL;
   MovOSDsaveName = NULL;
   FileSize[0] = MovieData[0] = CropData[0] = ScaleData[0] = NULL;

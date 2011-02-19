@@ -39,7 +39,7 @@ class cTemplate {
   cCodecs *C;
 
   void Save();
-  int New(char *n);
+  int New(const char *n);
   void Del(int i);
   void setName(int i, char *n);
   void setFileSize(int i, int fs, int fn);
@@ -51,7 +51,7 @@ class cTemplate {
   int getACodec(int i);
   void setBpp(int i, int b);
   void setScaleType(int i, int t);
-  int getNumTemplate(char *n);
+  int getNumTemplate(const char *n);
   int getNumTemplates();
   char *getName(int i);
   char *getShortname(int i);

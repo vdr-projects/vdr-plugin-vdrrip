@@ -494,24 +494,16 @@ const char* cMovie::getPPValues() {return PPValues;}
 
 
 void cMovie::setLengthVDR() {
-	char *infoFile = NULL;
-	asprintf(&infoFile, "%s%s", Dir, OldRecording ? "/info.vdr" : "/info");
-	dsyslog ("[vdrrip] reading recording info %s ",infoFile);
-	cRecordingInfo *crec = new cRecordingInfo(Dir);
-	FILE *f = fopen(infoFile, "r");
-	if (crec->Read(f)) {
-		cIndexFile *ifile = new cIndexFile(Dir, false, OldRecording);
-		Length = ifile->Last() / crec->FramesPerSecond();
-		delete (ifile);
-		dsyslog("[vdrrip] parsed index && info");
-	} else {
-		dsyslog ("[vdrrip] failed reading info");
-		Length = 10;
-	}
+	int frames=0;
+	double fps=10.0;
+	cIndexFile *ifile = new cIndexFile(Dir, false, OldRecording);
+	frames= ifile->Last();
+	delete (ifile);
+	cRecording *crec = new cRecording(Dir);
+	fps= crec->FramesPerSecond();
 	delete (crec);
-	FREE (infoFile);
-	fclose(f);
-	dsyslog ("[vdrrip] length: %i seconds ",Length);
+	Length=frames / fps;
+	dsyslog ("[vdrrip] %i frames / %f fps = %i seconds ", frames, fps, Length);
 }
 
 //TODO: maybe get these out of cRecordingInfo et al. ?

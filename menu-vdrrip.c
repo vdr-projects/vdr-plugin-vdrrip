@@ -37,6 +37,7 @@ static const char *DVBScaleWidths[] = { "352", "480", "544", "688", "704", "720"
 static const char *DVBScaleHeights[] = { "288", "576" };
 static const char *CropModes[] = { "crop width & height", "crop only height"};
 static const char *PPDeint[] = { "off", "fd", "lb", "li", "ci", "md", };
+static const char *PPDeintDescriptions[] = { "off", "fd (FFmpeg deinterlacing)", "lb (linear blend)", "li (linear interpolating)", "ci (cubic interpolating)", "md (median deinterlacing)" };
 
 // --- cMenuVdrrip ---------------------------------------------------------
 
@@ -937,7 +938,7 @@ void cMenuVdrripMovie::OSDCreate() {
       asprintf(&s, tr("- postprocessing Filters(%s):"), M->getPPValues() ? M->getPPValues() : "off");
       AddColItem(new cOsdItem(s));
       FREE(s);
-      Add(new cMenuEditStraItem("deinterlacing", &MovOSD.PPDeinterlace, NUMPPDEINT, PPDeint));
+      Add(new cMenuEditStraItem("deinterlacing", &MovOSD.PPDeinterlace, NUMPPDEINT, PPDeintDescriptions));
       Add(new cMenuEditBoolItem("deblocking", &MovOSD.PPDeblock, "off", "on"));
   }
 

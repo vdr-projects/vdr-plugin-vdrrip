@@ -29,10 +29,15 @@ cVdrripRecordings::~cVdrripRecordings() {
 void cVdrripRecordings::ReadRec() {
   char *cmd = NULL, *buf = NULL;
   size_t i = 0;
+#if APIVERSNUM > 20101
+  int colv = strnumcol(cVideoDirectory::Name(), "/");
 
+  asprintf(&cmd, FINDRECCMD, cVideoDirectory::Name());
+#else
   int colv = strnumcol(VideoDirectory, "/");
 
   asprintf(&cmd, FINDRECCMD, VideoDirectory);
+#endif
   FILE *p = popen(cmd, "r");
   if (p) {
     while (getline(&buf, &i, p) != -1) {

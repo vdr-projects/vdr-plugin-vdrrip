@@ -1,0 +1,247 @@
+# VDR plugin language source file.
+# Copyright (C) 2007 Klaus Schmidinger <kls@tvdr.de>
+# This file is distributed under the same license as the VDR package.
+# Jean-Claude Repetto <jc@repetto.org>, 2001
+# Olivier Jacques <jacquesolivier@hotmail.com>, 2003
+# Gregoire Favre <greg@magma.unil.ch>, 2003
+# Nicolas Huillard <nhuillard@e-dition.fr>, 2005
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: VDR 1.5.7\n"
+"Report-Msgid-Bugs-To: <tobias.grimm@e-tobi.net>\n"
+"POT-Creation-Date: 2012-06-03 11:14+0200\n"
+"PO-Revision-Date: 2012-06-03 10:59+0200\n"
+"Last-Translator: Nicolas Huillard <nhuillard@e-dition.fr>\n"
+"Language-Team: <vdr@linuxtv.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "encode vdr-recording"
+msgstr "Encoder un enregistrement"
+
+msgid "encode dvd"
+msgstr ""
+
+msgid "edit encoding queue"
+msgstr "Voir les encodages en attente"
+
+msgid "edit templates"
+msgstr "Editer les gabarits"
+
+msgid "back"
+msgstr ""
+
+msgid "accept"
+msgstr ""
+
+msgid "checking dvd..."
+msgstr ""
+
+msgid "scanning recordings..."
+msgstr ""
+
+msgid "the queuefile is locked by the queuehandler !"
+msgstr ""
+
+#, c-format
+msgid "delete movie %s from queue ?"
+msgstr ""
+
+msgid "delete"
+msgstr "Effacer"
+
+msgid "up"
+msgstr ""
+
+msgid "down"
+msgstr ""
+
+msgid "switch mode"
+msgstr ""
+
+msgid "edit"
+msgstr "Editer"
+
+msgid "new"
+msgstr "Nouveau"
+
+#, c-format
+msgid "delete template %s ?"
+msgstr "Effacer le gabarit %s ?"
+
+msgid "edit template"
+msgstr "Editer les gabarits"
+
+msgid "ABC/abc"
+msgstr ""
+
+msgid "Overwrite"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "FileSize"
+msgstr "TailleFich"
+
+msgid "FileNumbers"
+msgstr "Nb fichiers"
+
+msgid "BitrateVideo"
+msgstr "Bitrate Video"
+
+msgid "BitrateAudio"
+msgstr "Bitrate Audio"
+
+msgid "Container"
+msgstr ""
+
+msgid "Video-Codec"
+msgstr "Codec Video"
+
+msgid "Audio-Codec"
+msgstr "Codec Audio"
+
+msgid "Bpp-Value (*100)"
+msgstr "ValeurBpp (*100)"
+
+msgid "ScaleType"
+msgstr "Dimensionnement"
+
+msgid "encode movie"
+msgstr "Encoder le film"
+
+msgid "reading movie-data..."
+msgstr ""
+
+msgid "add to queue"
+msgstr "Ajout. Queue"
+
+msgid "reset boarders"
+msgstr "Supp. les limites"
+
+#, fuzzy
+msgid "crop boarders"
+msgstr "Supp. les limites"
+
+msgid "expert modus(off)"
+msgstr "Mode Expert(off)"
+
+#, fuzzy
+msgid "expert modus(on)"
+msgstr "Mode Expert(off)"
+
+msgid "Template"
+msgstr "Gabarit"
+
+msgid "Title*"
+msgstr ""
+
+msgid "unknown"
+msgstr ""
+
+msgid "MovieData"
+msgstr "Film-Infos"
+
+msgid "not used"
+msgstr ""
+
+msgid "CropData"
+msgstr "ValeursDécoupage"
+
+msgid "Audio-Str."
+msgstr "Flux Audio"
+
+msgid "ScaleData"
+msgstr "ValeursRedimensionnement"
+
+msgid "ScaleWidth"
+msgstr "Largeur Redimensionnement"
+
+msgid "ScaleHeight"
+msgstr "Hauteur Redimensionnement"
+
+msgid "------ expert settings: ------"
+msgstr "--- Paramètres Mode Expert: ---"
+
+msgid "- adjust crop values:"
+msgstr "- Ajuster les valeurs de découpage:"
+
+msgid "CropWidth"
+msgstr "Largeur Découpage"
+
+msgid "CropHeight"
+msgstr "Hauteur Découpage"
+
+#, c-format
+msgid "- postprocessing Filters(%s):"
+msgstr "- Filtres de PostTraitement(%s):"
+
+msgid "reading audio-data from dvd..."
+msgstr ""
+
+msgid "<ok> for preview-mode"
+msgstr ""
+
+msgid "add movie to encoding queue ?"
+msgstr "Ajouter le film à la queue d'encodage ?"
+
+msgid "reset black movie boarders ?"
+msgstr ""
+
+msgid "crop black movie boarders ?"
+msgstr "Découper le film entre les limites noires ?"
+
+msgid "search for black movie boarders"
+msgstr "Rechercher les limites noires dans le film"
+
+msgid "couldn't detect black movie boarders !"
+msgstr ""
+
+msgid "select dvd title"
+msgstr ""
+
+msgid "select audio stream(s)"
+msgstr ""
+
+msgid "MaxScaleWidth"
+msgstr "LargeurMaxiRedimensionnement"
+
+msgid "MinScaleWidth"
+msgstr "LargeurMiniRedimensionnement"
+
+msgid "Crop Mode"
+msgstr "Mode de découpage"
+
+msgid "Crop DetectLength (s)"
+msgstr "Découpage-Longeur de détection (s)"
+
+msgid "Rename movie after encoding"
+msgstr "Renommer le film après l'encodage"
+
+msgid "no"
+msgstr ""
+
+msgid "yes"
+msgstr ""
+
+msgid "Ogg-Vorbis support"
+msgstr ""
+
+msgid "AC3 support (MPlayer-patch inst.)"
+msgstr ""
+
+msgid "Ogm support"
+msgstr ""
+
+msgid "Matroska support"
+msgstr ""
+
+msgid "not found"
+msgstr ""

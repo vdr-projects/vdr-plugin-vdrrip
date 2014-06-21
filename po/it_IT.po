@@ -1,0 +1,246 @@
+# VDR plugin language source file.
+# Copyright (C) 2007 Klaus Schmidinger <kls@tvdr.de>
+# This file is distributed under the same license as the VDR package.
+# Alberto Carraro <bertocar@tin.it>, 2001
+# Antonio Ospite <ospite@studenti.unina.it>, 2003
+# Sean Carlos <seanc@libero.it>, 2005
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: VDR 1.5.7\n"
+"Report-Msgid-Bugs-To: <tobias.grimm@e-tobi.net>\n"
+"POT-Creation-Date: 2012-06-03 11:14+0200\n"
+"PO-Revision-Date: 2012-06-03 10:59+0200\n"
+"Last-Translator: Sean Carlos <seanc@libero.it>\n"
+"Language-Team: <vdr@linuxtv.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "encode vdr-recording"
+msgstr "Comprimi registrazioni di vdr"
+
+msgid "encode dvd"
+msgstr ""
+
+msgid "edit encoding queue"
+msgstr "Visualizza coda di compressione"
+
+msgid "edit templates"
+msgstr "Editare le maschere"
+
+msgid "back"
+msgstr ""
+
+msgid "accept"
+msgstr ""
+
+msgid "checking dvd..."
+msgstr ""
+
+msgid "scanning recordings..."
+msgstr ""
+
+msgid "the queuefile is locked by the queuehandler !"
+msgstr ""
+
+#, c-format
+msgid "delete movie %s from queue ?"
+msgstr ""
+
+msgid "delete"
+msgstr "Cancellare"
+
+msgid "up"
+msgstr ""
+
+msgid "down"
+msgstr ""
+
+msgid "switch mode"
+msgstr ""
+
+msgid "edit"
+msgstr "Editare"
+
+msgid "new"
+msgstr "Nuovo"
+
+#, c-format
+msgid "delete template %s ?"
+msgstr "Cancellare maschera %s ?"
+
+msgid "edit template"
+msgstr "Editare la maschera"
+
+msgid "ABC/abc"
+msgstr ""
+
+msgid "Overwrite"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Name"
+msgstr "Nome"
+
+msgid "FileSize"
+msgstr "Dimensione file"
+
+msgid "FileNumbers"
+msgstr "Numero di file"
+
+msgid "BitrateVideo"
+msgstr "Video bitrate"
+
+msgid "BitrateAudio"
+msgstr "Audio bitrate"
+
+msgid "Container"
+msgstr ""
+
+msgid "Video-Codec"
+msgstr "Codec video"
+
+msgid "Audio-Codec"
+msgstr "Codec audio"
+
+msgid "Bpp-Value (*100)"
+msgstr "Valore Bpp (*100)"
+
+msgid "ScaleType"
+msgstr "Tipo scalatura"
+
+msgid "encode movie"
+msgstr "Compressione video"
+
+msgid "reading movie-data..."
+msgstr ""
+
+msgid "add to queue"
+msgstr "Aggiunto in coda"
+
+msgid "reset boarders"
+msgstr "Taglio bordi"
+
+#, fuzzy
+msgid "crop boarders"
+msgstr "Taglio bordi"
+
+msgid "expert modus(off)"
+msgstr "Modo esperto(off)"
+
+#, fuzzy
+msgid "expert modus(on)"
+msgstr "Modo esperto(off)"
+
+msgid "Template"
+msgstr ""
+
+msgid "Title*"
+msgstr ""
+
+msgid "unknown"
+msgstr ""
+
+msgid "MovieData"
+msgstr "Dati del Film"
+
+msgid "not used"
+msgstr ""
+
+msgid "CropData"
+msgstr "Valori di taglio"
+
+msgid "Audio-Str."
+msgstr "Stream audio"
+
+msgid "ScaleData"
+msgstr "Valore di scalatura"
+
+msgid "ScaleWidth"
+msgstr "Scalatura larghezza"
+
+msgid "ScaleHeight"
+msgstr "Scalatura altezza"
+
+msgid "------ expert settings: ------"
+msgstr "------ settaggi esperto: ------"
+
+msgid "- adjust crop values:"
+msgstr "- aggiustatura valori di taglio:"
+
+msgid "CropWidth"
+msgstr "Taglio larghezza"
+
+msgid "CropHeight"
+msgstr "Taglio altezza"
+
+#, c-format
+msgid "- postprocessing Filters(%s):"
+msgstr "- Filtri dopo il processo(%s):"
+
+msgid "reading audio-data from dvd..."
+msgstr ""
+
+msgid "<ok> for preview-mode"
+msgstr ""
+
+msgid "add movie to encoding queue ?"
+msgstr "Aggiungere un film alla coda di compressione ?"
+
+msgid "reset black movie boarders ?"
+msgstr ""
+
+msgid "crop black movie boarders ?"
+msgstr "Tagliare i bordi neri del video ?"
+
+msgid "search for black movie boarders"
+msgstr "Ricerca bordi neri nel video"
+
+msgid "couldn't detect black movie boarders !"
+msgstr ""
+
+msgid "select dvd title"
+msgstr ""
+
+msgid "select audio stream(s)"
+msgstr ""
+
+msgid "MaxScaleWidth"
+msgstr "Massima scalatura larghezza"
+
+msgid "MinScaleWidth"
+msgstr "Minima scalatura larghezza"
+
+msgid "Crop Mode"
+msgstr "Modo di taglio"
+
+msgid "Crop DetectLength (s)"
+msgstr "Ricerca larghezza di taglio (s)"
+
+msgid "Rename movie after encoding"
+msgstr "Rinnominare il film dopo la compressione"
+
+msgid "no"
+msgstr ""
+
+msgid "yes"
+msgstr ""
+
+msgid "Ogg-Vorbis support"
+msgstr ""
+
+msgid "AC3 support (MPlayer-patch inst.)"
+msgstr ""
+
+msgid "Ogm support"
+msgstr ""
+
+msgid "Matroska support"
+msgstr ""
+
+msgid "not found"
+msgstr ""

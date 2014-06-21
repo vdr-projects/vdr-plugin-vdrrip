@@ -1,0 +1,244 @@
+# VDR plugin language source file.
+# Copyright (C) 2007 Klaus Schmidinger <kls@tvdr.de>
+# This file is distributed under the same license as the VDR package.
+# Klaus Schmidinger <kls@tvdr.de>, 2000
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: VDR 1.5.7\n"
+"Report-Msgid-Bugs-To: <tobias.grimm@e-tobi.net>\n"
+"POT-Creation-Date: 2012-06-03 11:14+0200\n"
+"PO-Revision-Date: 2012-06-03 10:59+0200\n"
+"Last-Translator: Klaus Schmidinger <kls@tvdr.de>\n"
+"Language-Team: <vdr@linuxtv.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "encode vdr-recording"
+msgstr "VDR-Aufzeichnung encodieren"
+
+msgid "encode dvd"
+msgstr "DVD encodieren"
+
+msgid "edit encoding queue"
+msgstr "Warteschlange bearbeiten"
+
+msgid "edit templates"
+msgstr "Schablonen bearbeiten"
+
+msgid "back"
+msgstr "zurueck"
+
+msgid "accept"
+msgstr "akzeptieren"
+
+msgid "checking dvd..."
+msgstr "ueberpruefe dvd..."
+
+msgid "scanning recordings..."
+msgstr ""
+
+msgid "the queuefile is locked by the queuehandler !"
+msgstr "die Warteschlange wird momentan vom queuehandler gesperrt !"
+
+#, c-format
+msgid "delete movie %s from queue ?"
+msgstr "Film %s von Warteschl. löschen ?"
+
+msgid "delete"
+msgstr "löschen"
+
+msgid "up"
+msgstr "nach oben"
+
+msgid "down"
+msgstr "nach unten"
+
+msgid "switch mode"
+msgstr "Modus wechseln"
+
+msgid "edit"
+msgstr "bearbeiten"
+
+msgid "new"
+msgstr "neu"
+
+#, c-format
+msgid "delete template %s ?"
+msgstr "Schablone %s löschen ?"
+
+msgid "edit template"
+msgstr "Schablone bearbeiten"
+
+msgid "ABC/abc"
+msgstr ""
+
+msgid "Overwrite"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Name"
+msgstr "Name"
+
+msgid "FileSize"
+msgstr "Datei-Grösse"
+
+msgid "FileNumbers"
+msgstr "Anzahl Dateien"
+
+msgid "BitrateVideo"
+msgstr "Bitrate Video"
+
+msgid "BitrateAudio"
+msgstr "Bitrate Audio"
+
+msgid "Container"
+msgstr "Container"
+
+msgid "Video-Codec"
+msgstr "Video Codec"
+
+msgid "Audio-Codec"
+msgstr "Audio Codec"
+
+msgid "Bpp-Value (*100)"
+msgstr "Bpp-Wert (*100)"
+
+msgid "ScaleType"
+msgstr "Skalierungsart"
+
+msgid "encode movie"
+msgstr "Film encodieren"
+
+msgid "reading movie-data..."
+msgstr "lese Film-Daten..."
+
+msgid "add to queue"
+msgstr "in Warteschl."
+
+msgid "reset boarders"
+msgstr "Ränder lösch."
+
+#, fuzzy
+msgid "crop boarders"
+msgstr "Ränder lösch."
+
+msgid "expert modus(off)"
+msgstr "Exp.-Modus(aus)"
+
+#, fuzzy
+msgid "expert modus(on)"
+msgstr "Exp.-Modus(aus)"
+
+msgid "Template"
+msgstr "Schablone"
+
+msgid "Title*"
+msgstr "Titel*"
+
+msgid "unknown"
+msgstr "unbekannt"
+
+msgid "MovieData"
+msgstr "Film-Daten"
+
+msgid "not used"
+msgstr "keine Nutzung"
+
+msgid "CropData"
+msgstr "Schnitt-Daten"
+
+msgid "Audio-Str."
+msgstr "Audiospur"
+
+msgid "ScaleData"
+msgstr "Skalierung"
+
+msgid "ScaleWidth"
+msgstr "Skal.-breite"
+
+msgid "ScaleHeight"
+msgstr "Skal.-höhe"
+
+msgid "------ expert settings: ------"
+msgstr "--- Experten-Einstellungen: ---"
+
+msgid "- adjust crop values:"
+msgstr "- Schnittwerte anpassen:"
+
+msgid "CropWidth"
+msgstr "Schnittbreite"
+
+msgid "CropHeight"
+msgstr "Schnitthöhe"
+
+#, c-format
+msgid "- postprocessing Filters(%s):"
+msgstr "- Nachbearbeitungsfilter(%s):"
+
+msgid "reading audio-data from dvd..."
+msgstr "lese Audio-Daten von DVD..."
+
+msgid "<ok> for preview-mode"
+msgstr "<ok> fuer Vorschau-Modus"
+
+msgid "add movie to encoding queue ?"
+msgstr "Film zur Warteschlange hinzufügen ?"
+
+msgid "reset black movie boarders ?"
+msgstr "schwarze Filmränder löschen ?"
+
+msgid "crop black movie boarders ?"
+msgstr "schwarze Filmränder schneiden ?"
+
+msgid "search for black movie boarders"
+msgstr "suche nach schwarzen Filmrändern"
+
+msgid "couldn't detect black movie boarders !"
+msgstr "konnte keine schwarzen Filmränder erkennen !"
+
+msgid "select dvd title"
+msgstr ""
+
+msgid "select audio stream(s)"
+msgstr ""
+
+msgid "MaxScaleWidth"
+msgstr "max. Skal.-breite"
+
+msgid "MinScaleWidth"
+msgstr "min. Skal.-breite"
+
+msgid "Crop Mode"
+msgstr "Schnittmodus"
+
+msgid "Crop DetectLength (s)"
+msgstr "Schnitt-Suchdauer (s)"
+
+msgid "Rename movie after encoding"
+msgstr "Film nach Enc. umbenennen"
+
+msgid "no"
+msgstr ""
+
+msgid "yes"
+msgstr ""
+
+msgid "Ogg-Vorbis support"
+msgstr ""
+
+msgid "AC3 support (MPlayer-patch inst.)"
+msgstr ""
+
+msgid "Ogm support"
+msgstr ""
+
+msgid "Matroska support"
+msgstr ""
+
+msgid "not found"
+msgstr "nicht gefunden"

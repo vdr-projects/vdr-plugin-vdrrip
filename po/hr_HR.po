@@ -1,0 +1,243 @@
+# VDR plugin language source file.
+# Copyright (C) 2007 Klaus Schmidinger <kls@tvdr.de>
+# This file is distributed under the same license as the VDR package.
+# Drazen Dupor <drazen.dupor@dupor.com>, 2004
+# Dino Ravnic <dino.ravnic@fer.hr>, 2004
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: VDR 1.5.7\n"
+"Report-Msgid-Bugs-To: <tobias.grimm@e-tobi.net>\n"
+"POT-Creation-Date: 2012-06-03 11:14+0200\n"
+"PO-Revision-Date: 2012-06-03 10:59+0200\n"
+"Last-Translator: Drazen Dupor <drazen.dupor@dupor.com>\n"
+"Language-Team: <vdr@linuxtv.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "encode vdr-recording"
+msgstr ""
+
+msgid "encode dvd"
+msgstr ""
+
+msgid "edit encoding queue"
+msgstr ""
+
+msgid "edit templates"
+msgstr ""
+
+msgid "back"
+msgstr ""
+
+msgid "accept"
+msgstr ""
+
+msgid "checking dvd..."
+msgstr ""
+
+msgid "scanning recordings..."
+msgstr ""
+
+msgid "the queuefile is locked by the queuehandler !"
+msgstr ""
+
+#, c-format
+msgid "delete movie %s from queue ?"
+msgstr ""
+
+msgid "delete"
+msgstr ""
+
+msgid "up"
+msgstr ""
+
+msgid "down"
+msgstr ""
+
+msgid "switch mode"
+msgstr ""
+
+msgid "edit"
+msgstr ""
+
+msgid "new"
+msgstr ""
+
+#, c-format
+msgid "delete template %s ?"
+msgstr ""
+
+msgid "edit template"
+msgstr ""
+
+msgid "ABC/abc"
+msgstr ""
+
+msgid "Overwrite"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "FileSize"
+msgstr ""
+
+msgid "FileNumbers"
+msgstr ""
+
+msgid "BitrateVideo"
+msgstr ""
+
+msgid "BitrateAudio"
+msgstr ""
+
+msgid "Container"
+msgstr ""
+
+msgid "Video-Codec"
+msgstr ""
+
+msgid "Audio-Codec"
+msgstr ""
+
+msgid "Bpp-Value (*100)"
+msgstr ""
+
+msgid "ScaleType"
+msgstr ""
+
+msgid "encode movie"
+msgstr ""
+
+msgid "reading movie-data..."
+msgstr ""
+
+msgid "add to queue"
+msgstr ""
+
+msgid "reset boarders"
+msgstr ""
+
+msgid "crop boarders"
+msgstr ""
+
+msgid "expert modus(off)"
+msgstr ""
+
+msgid "expert modus(on)"
+msgstr ""
+
+msgid "Template"
+msgstr ""
+
+msgid "Title*"
+msgstr ""
+
+msgid "unknown"
+msgstr ""
+
+msgid "MovieData"
+msgstr ""
+
+msgid "not used"
+msgstr ""
+
+msgid "CropData"
+msgstr ""
+
+msgid "Audio-Str."
+msgstr ""
+
+msgid "ScaleData"
+msgstr ""
+
+msgid "ScaleWidth"
+msgstr ""
+
+msgid "ScaleHeight"
+msgstr ""
+
+msgid "------ expert settings: ------"
+msgstr ""
+
+msgid "- adjust crop values:"
+msgstr ""
+
+msgid "CropWidth"
+msgstr ""
+
+msgid "CropHeight"
+msgstr ""
+
+#, c-format
+msgid "- postprocessing Filters(%s):"
+msgstr ""
+
+msgid "reading audio-data from dvd..."
+msgstr ""
+
+msgid "<ok> for preview-mode"
+msgstr ""
+
+msgid "add movie to encoding queue ?"
+msgstr ""
+
+msgid "reset black movie boarders ?"
+msgstr ""
+
+msgid "crop black movie boarders ?"
+msgstr ""
+
+msgid "search for black movie boarders"
+msgstr ""
+
+msgid "couldn't detect black movie boarders !"
+msgstr ""
+
+msgid "select dvd title"
+msgstr ""
+
+msgid "select audio stream(s)"
+msgstr ""
+
+msgid "MaxScaleWidth"
+msgstr ""
+
+msgid "MinScaleWidth"
+msgstr ""
+
+msgid "Crop Mode"
+msgstr ""
+
+msgid "Crop DetectLength (s)"
+msgstr ""
+
+msgid "Rename movie after encoding"
+msgstr ""
+
+msgid "no"
+msgstr ""
+
+msgid "yes"
+msgstr ""
+
+msgid "Ogg-Vorbis support"
+msgstr ""
+
+msgid "AC3 support (MPlayer-patch inst.)"
+msgstr ""
+
+msgid "Ogm support"
+msgstr ""
+
+msgid "Matroska support"
+msgstr ""
+
+msgid "not found"
+msgstr ""

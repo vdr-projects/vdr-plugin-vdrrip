@@ -575,7 +575,12 @@ void cMovie::queryAudioDataVDR() {
   size_t i = 0;
   int n = 0;
   int c = 0;
-  
+  cRecording *crec = new cRecording(Dir);
+  for (int i=0;i<crec->Info()->Components()->NumComponents();i++) {
+	  tComponent *t = crec->Info()->Components()->Component(i);
+	  dsyslog("[vdrrip] component %s",(const char *)t->ToString());
+  }
+  delete (crec);
   // Get Audio PID
   if (!OldRecording) {
     asprintf(&cmd, AUDIOPID, MPlayer, Dir);

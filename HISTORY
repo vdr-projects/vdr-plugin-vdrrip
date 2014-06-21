@@ -141,4 +141,5 @@ VDR Plugin 'vdrrip' Revision History
 - Version bump
 - Stole i18n Patch from e-tobi
 - Make gcc happy by using (char *) casts and inserting some paranthesis
+- Fixed build for vdr > 2.1.2
 

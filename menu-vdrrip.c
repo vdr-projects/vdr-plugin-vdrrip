@@ -787,13 +787,13 @@ void cMenuVdrripMovie::SetHelpKeys() {
   if (Current() == 0) {
     SetHelp(tr("ABC/abc"), tr("Overwrite"), tr("Delete"), NULL);
   } else {
-    MovOSD.ScaleType == 1 | MovOSD.ScaleType == 3 ? Crop = true : Crop = false;
-    MovOSD.CropWidth == -1 && MovOSD.CropHeight == -1 ? CropReset = false :
+    (MovOSD.ScaleType == 1) | (MovOSD.ScaleType == 3) ? Crop = true : Crop = false;
+    (MovOSD.CropWidth == -1) && (MovOSD.CropHeight == -1) ? CropReset = false :
                                                         CropReset = true;
 
     SetHelp(tr("add to queue"), 
-	    Crop ? tr(CropReset ? "reset boarders" : "crop boarders" ) : NULL,
-	    tr(Expert ? "expert modus(off)" : "expert modus(on)"),
+	    Crop ? CropReset ? tr("reset boarders") : tr("crop boarders") : NULL,
+	    Expert ? tr("expert modus(off)") : tr("expert modus(on)"),
 	    NULL);
   }
 }
@@ -1165,7 +1165,7 @@ eOSState cMenuVdrripMovie::ProcessKey(eKeys Key) {
       }
 
       case kGreen: {
-        if (MovOSD.ScaleType == 1 | MovOSD.ScaleType == 3) {
+        if ((MovOSD.ScaleType == 1) | (MovOSD.ScaleType == 3)) {
 	  if (CropReset) {
 	    if (Interface->Confirm(tr("reset black movie boarders ?"))) {
 	        CropReset = false;

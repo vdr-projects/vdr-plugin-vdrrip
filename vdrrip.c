@@ -13,7 +13,7 @@
 #include <vdr/menu.h>
 #include "menu-vdrrip.h"
 #include "movie.h"
-#include "i18n.h"
+#include <vdr/i18n.h>
 #include "a-tools.h"
 
 static const char *VERSION       = "0.3.0";
@@ -117,7 +117,6 @@ bool cPluginVdrrip::Initialize(void)
 bool cPluginVdrrip::Start(void)
 {
   // Start any background activities the plugin shall perform.
-  RegisterI18n(Phrases);
   return true;
 }
 

@@ -91,7 +91,7 @@ int strnumcol(const char *s, const char *d) {
 }
 
 char *strgrep(const char *s, FILE *f) {
-  char *s1 = "";
+  char *s1 = (char *)"";
   size_t i = 0;
 
   // let's do some checks

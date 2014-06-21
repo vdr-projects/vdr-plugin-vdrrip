@@ -136,3 +136,9 @@ VDR Plugin 'vdrrip' Revision History
       - use libdvdread's NEW_IFO_READ functions
       - fix compilation for gcc4.4
 - Needs Project-X for demux.
+
+2014-06-21: Version 0.5 WIP
+- Version bump
+- Stole i18n Patch from e-tobi
+- Make gcc happy by using (char *) casts and inserting some paranthesis
+

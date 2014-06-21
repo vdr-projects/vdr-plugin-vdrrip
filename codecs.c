@@ -20,7 +20,7 @@ extern const char *MEncoder;
 cCodecs::cCodecs() {
   VCodecs = ACodecs = Containers = NULL;
 
-  queryCodecs(VCODECS, ACODECS);
+  queryCodecs((char *)VCODECS, (char *)ACODECS);
   queryContainers();
 }
 
@@ -117,13 +117,13 @@ void cCodecs::queryContainers() {
 
   Containers = (char**)malloc(NumContainers * sizeof(char*));
 
-  Containers[0] = "avi";
+  Containers[0] = (char *)"avi";
   
   if (VdrripSetup.Ogm == 1) {
-    Containers[i] = "ogm";
+    Containers[i] = (char *)"ogm";
     i++;}
     
-  if (VdrripSetup.Matroska == 1) {Containers[i] = "matroska";}
+  if (VdrripSetup.Matroska == 1) {Containers[i] = (char *)"matroska";}
 }
 
 
